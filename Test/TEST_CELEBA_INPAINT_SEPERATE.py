@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Funcs')))
+sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Nets')))
 import torch
 import torchvision
 from torch.utils.data import DataLoader
@@ -18,7 +22,7 @@ train_loader = DataLoader(
 Net = ButterFlyNet_INPAINT(64,6,4,False).cuda()
 
 print('Loading parameters...')
-Net.load_state_dict(torch.load('64SeperateCelebainpainting.pth'))
+Net.load_state_dict(torch.load('../../PTHS/64SeperateCelebainpainting.pth'))
 print('Done.')
 
 
