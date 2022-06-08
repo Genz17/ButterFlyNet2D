@@ -14,23 +14,25 @@ from Test_INPAINT_Types import *
 
 epochs = 1
 batch_size = 1
-image_size = 64
+image_size = 256
 
 train_loader = DataLoader(
-    torchvision.datasets.ImageFolder(root='F:/CELEBA/',
+    torchvision.datasets.ImageFolder(root='../../CELEBA/',
                                transform=torchvision.transforms.Compose(
                                    [torchvision.transforms.ToTensor(),
                                     torchvision.transforms.Resize((image_size,image_size))])),
     batch_size=batch_size, shuffle=False)
 
-local_size = 64
-Net = ButterFlyNet_INPAINT(local_size,6,4,False).cuda()
+local_size = 32
+Net = ButterFlyNet_INPAINT(local_size,5,4,False).cuda()
+
+
 
 print('Loading parameters...')
-Net.load_state_dict(torch.load('../../PTHS/64NoLiGRAYCelebainpainting.pth'))
+Net.load_state_dict(torch.load('../../PTHS/54GRAYLineSeperateCelebainpainting.pth'))
 print('Done.')
 
 
-Rmask = eval('squareMask' + str(image_size))(torch.zeros(batch_size,3,image_size,image_size)).cuda()
+Rmask = eval('lineMask' + str(image_size))(torch.zeros(batch_size,3,image_size,image_size)).cuda()
 
 overlap(train_loader,batch_size,Net,Rmask,image_size,local_size)
