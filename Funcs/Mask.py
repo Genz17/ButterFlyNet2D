@@ -18,8 +18,7 @@ def squareMask64(inputData):
 def squareMask128(inputData):
     # 4 dimension
     mat = torch.ones_like(inputData)
-    mat[:,:,45:85,45:85]  =\
-        torch.zeros_like(mat[:,:,45:85,45:85])
+    mat[:,:,45:85,45:85] = 0
     return mat
 
 def squareMask256(inputData):
