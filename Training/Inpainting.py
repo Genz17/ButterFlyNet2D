@@ -58,7 +58,7 @@ for epoch in range(epochs):
         optimizer.zero_grad()
         output = Net(pileImageMasked)
         loss = torch.norm(output - pileImage) / torch.norm(pileImage)
-        loss.backward(retain_graph=True)
+        loss.backward()
         optimizer.step()
         scheduler.step(loss)
         print('Inpaint: local size {}, image size {} Train Epoch: {}, [{}/{} ({:.2f}%)]\tLoss: {:.6f}'.format(local_size,image_size,epoch, step * len(image),
