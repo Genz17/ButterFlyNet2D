@@ -66,4 +66,4 @@ for epoch in range(epochs):
                                                                         100 * step / len(train_loader),
                                                                         loss.item()))
 print('Training is Done.')
-torch.save(Net.state_dict(),'{}_{}_Celeba_square_inpainting}'.format(local_size,image_size))
+torch.save(Net.state_dict(),'{}_{}_Celeba_square_inpainting'.format(local_size,image_size))
