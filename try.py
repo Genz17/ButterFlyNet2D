@@ -1,5 +1,10 @@
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(__file__,'..','Funcs')))
+sys.path.append(os.path.abspath(os.path.join(__file__,'..','Nets')))
 import numpy as np
 import torch
+import torch.nn as nn
 import matplotlib.pyplot as plt
 from ButterFlyNet2D import ButterFlyNet2D
 

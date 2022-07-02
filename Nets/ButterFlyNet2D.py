@@ -1,10 +1,18 @@
-from sys import path
-path.append(r'..\supportFuncs')
+'''
+This is the core network implementaion,
+Put Non-zero entries in Butterfly Algorithm into CNN.
+'''
+
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Funcs')))
+sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Nets')))
 from Chebyshev_Nodes import *
 from Lagrange_Interpolation import *
 import torch
 import numpy as np
 import torch.nn as nn
+
 class ButterFlyNet2D(nn.Module):
     '''
     Pay attention to that the paras are x first then y, different to the order in pytorch.
