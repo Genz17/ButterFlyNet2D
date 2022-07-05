@@ -1,3 +1,6 @@
+'''
+This is for the inpainting task.
+'''
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Funcs')))
@@ -12,9 +15,9 @@ from ButterFlyNet_INPAINT import ButterFlyNet_INPAINT
 epochs = 20
 batch_size = 50
 learning_rate = 0.001
-data_path = '../data/celebaselected/'
-image_size = 64
-local_size = 64
+data_path = '../data/celebaselected/' # choose the path where your data is at
+image_size = 64 # your image size
+local_size = 64 # size the network deals
 pile_time = image_size // local_size
 net_layer = 6 # should be no more than log_2(local_size)
 cheb_num = 4

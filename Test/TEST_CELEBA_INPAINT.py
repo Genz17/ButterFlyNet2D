@@ -13,10 +13,10 @@ from Test_INPAINT_Types import *
 
 
 epochs = 1
-batch_size = 1
+batch_size = 256
 image_size = 256
 
-train_loader = DataLoader(
+test_loader = DataLoader(
     torchvision.datasets.ImageFolder(root='../../CELEBA/',
                                transform=torchvision.transforms.Compose(
                                    [torchvision.transforms.ToTensor(),
@@ -35,4 +35,4 @@ print('Done.')
 
 Rmask = eval('lineMask' + str(image_size))(torch.zeros(batch_size,3,image_size,image_size)).cuda()
 
-overlap(train_loader,batch_size,Net,Rmask,image_size,local_size)
+overlap(test_loader,batch_size,Net,Rmask,image_size,local_size)
