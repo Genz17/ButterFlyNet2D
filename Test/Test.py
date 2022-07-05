@@ -20,9 +20,10 @@ batch_size = 256
 local_size = 64
 image_size = 256
 data_path = '../../CELEBA/'
+para_path = ''
 net_layer = 6 # should be no more than log_2(local_size)
 cheb_num = 4
-local_size = 32
+
 if testType == 'inpainting':
     Net = ButterFlyNet_INPAINT(local_size, net_layer, cheb_num, False).cuda()
 elif testType == 'denoising':
@@ -38,7 +39,7 @@ test_loader = DataLoader(
 
 
 print('Loading parameters...')
-Net.load_state_dict(torch.load('../../PTHS/54GRAYLineSeperateCelebainpainting.pth'))
+Net.load_state_dict(torch.load(para_path))
 print('Done.')
 
 if testType == 'inpainting':
