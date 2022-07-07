@@ -47,6 +47,6 @@ if testType == 'inpainting':
 elif testType == 'denoising':
     noise_mean = 0
     noise_std = 0.1
-    test_denoising(test_loader, batch_size, Net, torch.normal(mean=noise_mean,std=noise_std,size=(batch_size,1,image_size,image_size),device='cuda:0'), image_size, local_size)
+    test_denoising(test_loader, batch_size, Net, noise_mean, noise_std, image_size, local_size)
 elif testType == 'deblurring':
     pass
