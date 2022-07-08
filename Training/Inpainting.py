@@ -16,7 +16,8 @@ from inpaint_test_func import test_inpainting
 
 #### Here are the settings to the training ###
 epochs = 30
-batch_size = 50
+batch_size_train = 50
+batch_size_test = 256
 learning_rate = 0.001
 data_path_train = '../../data/celebaselected/' # choose the path where your data is located
 data_path_test = '../../data/CelebaTest/' # choose the path where your data is located
@@ -33,7 +34,7 @@ train_loader = DataLoader(
                                    [torchvision.transforms.Grayscale(num_output_channels=1),
                                     torchvision.transforms.ToTensor(),
                                     torchvision.transforms.Resize((image_size,image_size))])),
-    batch_size=batch_size, shuffle=True)
+    batch_size=batch_size_train, shuffle=True)
 
 test_loader = DataLoader(
     torchvision.datasets.ImageFolder(data_path_test,
@@ -41,7 +42,7 @@ test_loader = DataLoader(
                                    [torchvision.transforms.Grayscale(num_output_channels=1),
                                     torchvision.transforms.ToTensor(),
                                     torchvision.transforms.Resize((image_size,image_size))])),
-    batch_size=batch_size, shuffle=True)
+    batch_size=batch_size_test, shuffle=True)
 
 Net = ButterFlyNet_INPAINT(local_size,net_layer,cheb_num,True).cuda()
 optimizer = torch.optim.Adam(Net.parameters(), lr=learning_rate)
@@ -83,7 +84,7 @@ for epoch in range(epochs):
 
     # Apply testing every epoch
     with torch.no_grad():
-        test_inpainting(test_loader,256,Net,mask,image_size,local_size)
+        test_inpainting(test_loader,batch_size_test,Net,mask,image_size,local_size)
 
 print('Training is Done.')
 torch.save(Net.state_dict(),'{}_{}_Celeba_square_inpainting.pth'.format(local_size,image_size))
