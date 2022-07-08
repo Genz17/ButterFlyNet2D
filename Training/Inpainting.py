@@ -27,7 +27,7 @@ pile_time = image_size // local_size
 net_layer = 6 # should be no more than log_2(local_size)
 cheb_num = 4
 mask_train = eval('squareMask'+str(image_size))(torch.zeros(batch_size_train,1,image_size,image_size)).cuda()
-mask_test = eval('squareMask'+str(image_size))(torch.zeros(batch_size_test,1,image_size,image_size)).cuda()
+mask_test = eval('squareMask'+str(image_size))(torch.zeros(batch_size_test,3,image_size,image_size)).cuda()
 
 train_loader = DataLoader(
     torchvision.datasets.ImageFolder(data_path_train,
@@ -40,14 +40,13 @@ train_loader = DataLoader(
 test_loader = DataLoader(
     torchvision.datasets.ImageFolder(data_path_test,
                                transform=torchvision.transforms.Compose(
-                                   [torchvision.transforms.Grayscale(num_output_channels=1),
-                                    torchvision.transforms.ToTensor(),
+                                   [torchvision.transforms.ToTensor(),
                                     torchvision.transforms.Resize((image_size,image_size))])),
-    batch_size=batch_size_test, shuffle=True)
+    batch_size=batch_size_test, shuffle=False)
 
 Net = ButterFlyNet_INPAINT(local_size,net_layer,cheb_num,True).cuda()
 optimizer = torch.optim.Adam(Net.parameters(), lr=learning_rate)
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.95, patience=50, verbose=True,
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.98, patience=50, verbose=True,
                                                          threshold=0.00005, threshold_mode='rel', cooldown=3, min_lr=0, eps=1e-16)
 ##############################################
 
