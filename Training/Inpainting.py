@@ -59,8 +59,8 @@ for epoch in range(epochs):
     for step, (image, label) in enumerate(train_loader):
         with torch.no_grad():
 
-            pileImage = torch.zeros((batch_size * (pile_time ** 2), 1, local_size, local_size)).cuda()
-            pileImageMasked = torch.zeros((batch_size * (pile_time ** 2), 1, local_size, local_size)).cuda()
+            pileImage = torch.zeros((batch_size * (pile_time ** 2), 1, local_size, local_size), device='cuda:0')
+            pileImageMasked = torch.zeros((batch_size * (pile_time ** 2), 1, local_size, local_size), device='cuda:0')
             image = image.cuda()
             maskedimage = image * mask
             for ii in range(pile_time ** 2):
