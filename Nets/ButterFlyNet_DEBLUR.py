@@ -6,28 +6,15 @@ from DeblurMatNet import deblurNet
 
 class ButterFlyNet_DEBLUR(nn.Module):
     # Testing: suppose input to be 64
-    def __init__(self, image_size, chebNum):
+    def __init__(self, image_size, layer, chebNum, prefix):
         super(ButterFlyNet_DEBLUR,self).__init__()
         layer = int(math.log2(image_size))
-<<<<<<< HEAD
-        self.encoderset1 = ButterFlyNet2D(1, image_size, image_size, layer, chebNum, 0, image_size, 0, image_size, False,
-                                          True).cuda()
-        self.decoderset1 = ButterFlyNet2D_IDFT(1, 0, image_size, 0, image_size, image_size, image_size, layer, chebNum,
-                                               False, True).cuda()
-        self.linear1 = deblurNet(2.5,(5,5),image_size,image_size,(image_size,image_size))
-    def forward(self, inputdata):
-        batch_size = inputdata.shape[0]
-        res_before = self.encoderset1(inputdata)
-        out1 = res_before.view(batch_size,-1)
-        output = self.linear1(out1)
-        out2 = output.view(res_before.shape)
-        res = self.decoderset1(out2)
-=======
-        self.encoderset = ButterFlyNet2D(1, image_size, image_size, layer, chebNum, 0, image_size, 0, image_size, False,
+        self.encoderset = ButterFlyNet2D(1, image_size, image_size, layer, chebNum, 0, image_size, 0, image_size, prefix,
                                           True).cuda()
         self.decoderset = ButterFlyNet2D_IDFT(1, 0, image_size, 0, image_size, image_size, image_size, layer, chebNum,
-                                               False, True).cuda()
+                                               prefix, True).cuda()
         self.linear = deblurNet(2.5,(5,5),image_size,image_size,(image_size,image_size))
+
     def forward(self, inputdata):
         batch_size = inputdata.shape[0]
         res_before = self.encoderset(inputdata)
@@ -35,6 +22,5 @@ class ButterFlyNet_DEBLUR(nn.Module):
         output = self.linear(out1)
         out2 = output.view(res_before.shape)
         res = self.decoderset(out2)
->>>>>>> 495339eccc31ffc674cf278c7056eea9123b9f20
 
         return res

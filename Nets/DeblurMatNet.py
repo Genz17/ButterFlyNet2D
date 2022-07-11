@@ -22,8 +22,5 @@ class deblurNet(nn.Module):
         return nn.Parameter(torch.tensor(weight, dtype=torch.complex64, device='cuda:0'))
 
     def generate_blurmat(self,std, kernel_size, original_shape):
-        # fullmat = np.fft.fftshift(np.fft.fft2(gauss(0, 0, std, kernel_size), original_shape))
-        #blurmat = fullmat[(original_shape[0]-self.in_height)//2:(original_shape[0]+self.in_height)//2, 
-        #                  (original_shape[1]-self.in_width)//2:(original_shape[1]+self.in_width)//2]
         blurmat = np.fft.fft2(gauss(0, 0, std, kernel_size), original_shape)
         return blurmat

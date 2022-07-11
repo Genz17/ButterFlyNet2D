@@ -53,7 +53,7 @@ scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', fa
 num = 0
 for para in Net.parameters():
     num+=torch.prod(torch.tensor(para.shape))
-print('The number of paras in the network is {}'.format(num))
+print('The number of paras in the network is {}.'.format(num))
 
 print('Test before training...')
 # Apply one test before training
@@ -92,6 +92,6 @@ for epoch in range(epochs):
         test_inpainting(test_loader,batch_size_test,Net,mask_test,image_size,local_size)
         print('Saving parameters...')
         torch.save(Net.state_dict(),'../../Pths/{}_{}_Celeba_square_inpainting.pth'.format(local_size,image_size))
-        print('Done')
+        print('Done.')
 
 print('Training is Done.')

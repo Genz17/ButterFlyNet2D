@@ -4,7 +4,7 @@ from ButterFlyNet2D_IDFT import ButterFlyNet2D_IDFT
 
 class ButterFlyNet_INPAINT(nn.Module):
     # Testing: suppose input to be 64
-    def __init__(self, image_size,layer,chebNum,prefix):
+    def __init__(self, image_size, layer, chebNum, prefix):
         super(ButterFlyNet_INPAINT,self).__init__()
         self.encoderset = ButterFlyNet2D(1, image_size, image_size, layer, chebNum, 0, image_size, 0, image_size, prefix, True).cuda()
         self.decoderset = ButterFlyNet2D_IDFT(1, 0, image_size, 0, image_size, image_size, image_size, layer, chebNum, prefix, True).cuda()
