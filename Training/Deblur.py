@@ -25,7 +25,7 @@ net_layer = 6 # should be no more than log_2(local_size)
 cheb_num = 4
 
 blurkernel_train = torch.tensor(gauss(0,0,2.5,(5,5)), device='cuda:0').view(1,1,5,5).repeat(batch_size_train,1,1,1) # while training, we only focus on 1 channel
-blurkernel_test = torch.tensor(gauss(0,0,2.5,(5,5)), device='cuda:0').view(1,1,5,5).repeat(batch_size_train,3,1,1) # 3 channels
+blurkernel_test = torch.tensor(gauss(0,0,2.5,(5,5)), device='cuda:0').view(1,1,5,5).repeat(batch_size_test,3,1,1) # 3 channels
 
 train_loader = DataLoader(
     torchvision.datasets.ImageFolder(data_path_train,
