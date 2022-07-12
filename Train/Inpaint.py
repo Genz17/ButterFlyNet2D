@@ -44,7 +44,9 @@ test_loader = DataLoader(
                                     torchvision.transforms.Resize((image_size,image_size))])),
     batch_size=batch_size_test, shuffle=False)
 
+print('Generating Net...')
 Net = ButterFlyNet_INPAINT(local_size,net_layer,cheb_num,True).cuda()
+print('Done.')
 optimizer = torch.optim.Adam(Net.parameters(), lr=learning_rate)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.98, patience=100, verbose=True,
                                                          threshold=0.00005, threshold_mode='rel', cooldown=3, min_lr=0, eps=1e-16)
