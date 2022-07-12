@@ -35,15 +35,12 @@ def test_inpainting(test_loader,batch_size,Net,mask,image_size,local_size):
 
         fig = plt.figure()
         plt.imshow(torch.permute(image[0].cpu(), (1, 2, 0)))
-        plt.show()
         plt.savefig('origin.png')
 
         fig = plt.figure()
         plt.imshow(torch.permute((maskedimage[0].cpu()), (1, 2, 0)))
-        plt.show()
         plt.savefig('operated.png')
 
         fig = plt.figure()
         plt.imshow((np.transpose((output_done.cpu().detach().numpy()[0]), (1, 2, 0))))
-        plt.show()
         plt.savefig('test.png')

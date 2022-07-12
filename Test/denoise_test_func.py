@@ -12,11 +12,7 @@ def test_denoising(test_loader,batch_size,Net,noise_mean,noise_std,image_size,lo
             lap_time = image_size // local_size
             pileNImage = torch.zeros((batch_size * (lap_time ** 2), 3, local_size, local_size)).cuda()
             image = image.cuda()
-<<<<<<< HEAD
-            noise = torch.normal(mean=noise_mean,std=noise_std,size=(batch_size,3,image_size,image_size),device='cuda:0')
-=======
             noise = torch.normal(mean=noise_mean,std=noise_std,size=(batch_size,1,image_size,image_size),device='cuda:0')
->>>>>>> 495339eccc31ffc674cf278c7056eea9123b9f20
             Nimage = image + noise
 
             for ii in range(lap_time ** 2):
@@ -31,11 +27,8 @@ def test_denoising(test_loader,batch_size,Net,noise_mean,noise_std,image_size,lo
                 for ii in range(lap_time ** 2):
                     output_done[:, i:i + 1, (ii // lap_time) * local_size:((ii // lap_time) + 1) * local_size,
                     (ii % lap_time) * local_size:((ii % lap_time) + 1) * local_size] = done[ii * batch_size:(ii + 1) * batch_size, :, :, :]
-<<<<<<< HEAD
-            before = sum([-10 * np.log10(((torch.norm(Nimage[i] - image[i], 'fro').item())
-=======
+                    
             before = sum([-10 * np.log10(((torch.norm(maskedimage[i] - image[i], 'fro').item())
->>>>>>> 495339eccc31ffc674cf278c7056eea9123b9f20
                                          ** 2) / (3 * image_size * image_size)) for i in range(batch_size)]) / batch_size
             after = sum([-10 * np.log10(((torch.norm(output_done[i] - image[i], 'fro').item())
                                         ** 2) / (3 * image_size * image_size)) for i in range(batch_size)]) / batch_size
@@ -44,15 +37,12 @@ def test_denoising(test_loader,batch_size,Net,noise_mean,noise_std,image_size,lo
 
         fig = plt.figure()
         plt.imshow(torch.permute(image[0].cpu(), (1, 2, 0)))
-        plt.show()
         plt.savefig('origin.png')
 
         fig = plt.figure()
         plt.imshow(torch.permute((Nimage[0].cpu()), (1, 2, 0)))
-        plt.show()
         plt.savefig('operated.png')
 
         fig = plt.figure()
         plt.imshow((np.transpose((output_done.cpu().detach().numpy()[0]), (1, 2, 0))))
-        plt.show()
         plt.savefig('recovered.png')

@@ -14,7 +14,7 @@ def test_deblurring(test_loader,batch_size,Net,blurkernel_test,image_size):
             bluredimage = (torch.fft.ifft2(fourierimage*torch.fft.fft2(blurkernel_test,(image_size, image_size)))).real
             output = torch.zeros((batch_size,3,image_size,image_size), device='cuda:0')
         for i in range(3):
-            output[:,i:i+1,:,:] = Net(image[:,i:i+1,:,:])
+            output[:,i:i+1,:,:] = Net(bluredimage[:,i:i+1,:,:])
         
         before = sum([-10 * np.log10((torch.norm(bluredimage[i:i+1,:,:,:] - image[i:i+1,:,:,:], 'fro').item())
                                         ** 2 / (3 * image_size * image_size)) for i in range(batch_size)]) / batch_size
@@ -25,15 +25,12 @@ def test_deblurring(test_loader,batch_size,Net,blurkernel_test,image_size):
 
         fig = plt.figure()
         plt.imshow(torch.permute(image[0].cpu(), (1, 2, 0)))
-        plt.show()
         plt.savefig('origin.png')
 
         fig = plt.figure()
         plt.imshow(torch.permute((bluredimage[0].cpu()), (1, 2, 0)))
-        plt.show()
         plt.savefig('operated.png')
 
         fig = plt.figure()
-        plt.imshow((np.transpose((output_done.cpu().detach().numpy()[0]), (1, 2, 0))))
-        plt.show()
+        plt.imshow((np.transpose((output.cpu().detach().numpy()[0]), (1, 2, 0))))
         plt.savefig('test.png')
