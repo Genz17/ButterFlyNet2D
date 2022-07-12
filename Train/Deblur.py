@@ -56,6 +56,11 @@ print('The number of paras in the network is {}.'.format(num))
 
 ##############################################
 
+# Test before training
+print('Test before training...')
+test_deblurring(test_loader, batch_size_test, Net, blurkernel_test, image_size)
+print('Done.')
+
 print('Traing Begins.')
 for epoch in range(epochs):
     for step, (image, label) in enumerate(train_loader):

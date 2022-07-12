@@ -18,7 +18,7 @@ def test_deblurring(test_loader,batch_size,Net,blurkernel_test,image_size):
         
         before = sum([-10 * np.log10((torch.norm(bluredimage[i:i+1,:,:,:] - image[i:i+1,:,:,:], 'fro').item())
                                         ** 2 / (3 * image_size * image_size)) for i in range(batch_size)]) / batch_size
-        after = sum([-10 * np.log10((torch.norm(output_done[i:i+1,:,:,:] - image[i:i+1,:,:,:], 'fro').item())
+        after = sum([-10 * np.log10((torch.norm(output[i:i+1,:,:,:] - image[i:i+1,:,:,:], 'fro').item())
                                     ** 2 / (3 * image_size * image_size)) for i in range(batch_size)]) / batch_size
                                         
         print('Before PSNR: {}, \t After PSNR: {}'.format(before, after))
