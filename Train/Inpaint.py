@@ -47,19 +47,25 @@ test_loader = DataLoader(
 print('Generating Net...')
 Net = ButterFlyNet_INPAINT(local_size,net_layer,cheb_num,True).cuda()
 print('Done.')
-optimizer = torch.optim.Adam(Net.parameters(), lr=learning_rate)
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.98, patience=100, verbose=True,
-                                                         threshold=0.00005, threshold_mode='rel', cooldown=3, min_lr=0, eps=1e-16)
-##############################################
 
 num = 0
 for para in Net.parameters():
     num+=torch.prod(torch.tensor(para.shape))
 print('The number of paras in the network is {}.'.format(num))
 
+# Pre FT Approx:
+Net.preFT(1000)
+
+optimizer = torch.optim.Adam(Net.parameters(), lr=learning_rate)
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.98, patience=100, verbose=True,
+                                                         threshold=0.00005, threshold_mode='rel', cooldown=3, min_lr=0, eps=1e-16)
+##############################################
+
+
 print('Test before training...')
 # Apply one test before training
-test_inpainting(test_loader,batch_size_test,Net,mask_test,image_size,local_size)
+with torch.no_grad():
+    test_inpainting(test_loader,batch_size_test,Net,mask_test,image_size,local_size)
 print('Done.')
 
 print('Training Begins.')
