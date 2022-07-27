@@ -14,8 +14,6 @@ from NoiseTransform import noiseTransfrom
 import numpy as np
 from ButterFlyNet_Identical import ButterFlyNet_Identical
 
-
-
 from inpaint_test_func import *
 from denoise_test_func import *
 from deblur_test_func  import *
@@ -36,18 +34,23 @@ Net = ButterFlyNet_Identical(image_size, layer, chebNum, False)
 print('Done.')
 
 if testType == 'inpainting':
-    transformCompose = 
+    transformCompose = [torchvision.transforms.ToTensor(),
+                        torchvision.transforms.Resize((image_size,image_size)),
+                        maskTransfrom(image_size)]
 elif testType == 'denoising':
-
+    transformCompose = [torchvision.transforms.ToTensor(),
+                        torchvision.transforms.Resize((image_size,image_size)),
+                        noiseTransfrom(0, 0.1)]
 else:
+    transformCompose = [torchvision.transforms.ToTensor(),
+                        torchvision.transforms.Resize((image_size,image_size)),
+                        blurTransfrom(0, 2.5, 5, 3)]
 
 test_loader = DataLoader(
     torchvision.datasets.ImageFolder(root=data_path,
-                               transform=torchvision.transforms.Compose(
-                                   [torchvision.transforms.ToTensor(),
-                                    torchvision.transforms.Resize((image_size,image_size)),
-                                    ])),
+                               transform=torchvision.transforms.Compose(transformCompose)),
     batch_size=batch_size, shuffle=False)
+
 print('Loading parameters...')
 Net.load_state_dict(torch.load(para_path))
 print('Done.')
@@ -55,8 +58,6 @@ print('Done.')
 if testType == 'inpainting':
     test_inpainting(test_loader,batch_size,Net,eval('squareMask'+str(image_size))(torch.zeros(batch_size,1,image_size,image_size)).cuda(),image_size,local_size)
 elif testType == 'denoising':
-    noise_mean = 0
-    noise_std = 0.1
-    test_denoising(test_loader, batch_size, Net, noise_mean, noise_std, image_size, local_size)
+    test_denoising(test_loader, batch_size, Net, image_size, local_size)
 elif testType == 'deblurring':
-    pass
+    test_deblurring(test_loader, batch_size, Net, image_size)
