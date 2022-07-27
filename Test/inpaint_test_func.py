@@ -11,8 +11,8 @@ def test_inpainting(test_loader,batch_size,Net,mask,image_size,local_size):
         with torch.no_grad():
             lap_time = image_size // local_size
             overlapMasked = torch.zeros((batch_size * (lap_time ** 2), 3, local_size, local_size)).cuda()
-            image = image.cuda()
-            maskedimage = image * mask
+            image = image[0].cuda()
+            maskedimage = image[1].cuda()
 
             for ii in range(lap_time ** 2):
                 overlapMasked[ii * batch_size:(ii + 1) * batch_size, :, :, :] = maskedimage[:, :,

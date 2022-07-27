@@ -10,9 +10,10 @@ import torch
 import torchvision
 from torch.utils.data import DataLoader
 from Mask import squareMask32,squareMask64,squareMask128,squareMask256,squareMask1024,lineMask256,randomMask
-from ButterFlyNet_INPAINT import ButterFlyNet_INPAINT
+from ButterFlyNet_Identical import ButterFlyNet_Identical
 from inpaint_test_func import test_inpainting
-
+from MaskTransform import maskTransfrom
+import matplotlib.pyplot as plt
 
 #### Here are the settings to the training ###
 epochs = 5
@@ -20,13 +21,13 @@ batch_size_train = 50
 batch_size_test = 256
 learning_rate = 0.002
 data_path_train = '../../data/celebaselected/' # choose the path where your data is located
-data_path_test = '../../data/CelebaTest/' # choose the path where your data is located
-image_size = 64 # the image size
+data_path_test = '../../CelebaTest/' # choose the path where your data is located
+image_size = 32 # the image size
 local_size = 64 # size the network deals
 pile_time = image_size // local_size
 net_layer = 6 # should be no more than log_2(local_size)
 cheb_num = 2
-pre = False
+distill = True
 mask_train = eval('squareMask'+str(image_size))(torch.zeros(batch_size_train,1,image_size,image_size)).cuda()
 mask_test = eval('squareMask'+str(image_size))(torch.zeros(batch_size_test,3,image_size,image_size)).cuda()
 
@@ -35,28 +36,28 @@ train_loader = DataLoader(
                                transform=torchvision.transforms.Compose(
                                    [torchvision.transforms.Grayscale(num_output_channels=1),
                                     torchvision.transforms.ToTensor(),
-                                    torchvision.transforms.Resize((image_size,image_size))])),
+                                    torchvision.transforms.Resize((image_size,image_size)),
+                                    maskTransfrom(image_size)])),
     batch_size=batch_size_train, shuffle=True)
 
 test_loader = DataLoader(
     torchvision.datasets.ImageFolder(data_path_test,
                                transform=torchvision.transforms.Compose(
                                    [torchvision.transforms.ToTensor(),
-                                    torchvision.transforms.Resize((image_size,image_size))])),
+                                    torchvision.transforms.Resize((image_size,image_size)),
+                                    maskTransfrom(image_size)])),
     batch_size=batch_size_test, shuffle=False)
 
 print('Generating Net...')
-Net = ButterFlyNet_INPAINT(local_size,net_layer,cheb_num,False).cuda()
+Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,False).cuda()
+if distill:
+    Net.distill(200)
 print('Done.')
 
 num = 0
 for para in Net.parameters():
     num+=torch.prod(torch.tensor(para.shape))
 print('The number of paras in the network is {}.'.format(num))
-
-# Pre FT Approx:
-if pre:
-    Net.preFT(200)
 
 optimizer = torch.optim.Adam(Net.parameters(), lr=learning_rate)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.99, patience=100, verbose=True,
@@ -76,8 +77,8 @@ for epoch in range(epochs):
 
             pileImage = torch.zeros((batch_size_train * (pile_time ** 2), 1, local_size, local_size)).cuda()
             pileImageMasked = torch.zeros((batch_size_train * (pile_time ** 2), 1, local_size, local_size)).cuda()
-            image = image.cuda()
-            maskedimage = image * mask_train
+            image = image[0].cuda()
+            maskedimage = image[1].cuda()
             for ii in range(pile_time ** 2):
                 pileImage[ii * batch_size_train:(ii + 1) * batch_size_train, :, :, :] = image[:, :,
                                                                           (ii // pile_time) * (local_size):(ii // pile_time) * (local_size) + local_size,

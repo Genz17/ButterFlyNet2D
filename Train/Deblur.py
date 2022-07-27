@@ -9,9 +9,9 @@ sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Test')))
 import torch
 import torchvision
 from torch.utils.data import DataLoader
-from ButterFlyNet_DEBLUR import ButterFlyNet_DEBLUR
-from Gaussian_Func import gauss
+from ButterFlyNet_Identical import ButterFlyNet_Identical
 from deblur_test_func import test_deblurring
+from BlurTransform import blurTransfrom
 
 #### Here are the settings to the training ###
 epochs = 30
@@ -23,6 +23,7 @@ data_path_test = '../../data/CelebaTest/' # choose the path where your data is l
 image_size = 64 # the image size
 net_layer = 6 # should be no more than log_2(local_size)
 cheb_num = 4
+distill = True
 
 blurkernel_train = torch.tensor(gauss(0,0,2.5,(5,5)), device='cuda:0').view(1,1,5,5).repeat(batch_size_train,1,1,1) # while training, we only focus on 1 channel
 blurkernel_test = torch.tensor(gauss(0,0,2.5,(5,5)), device='cuda:0').view(1,1,5,5).repeat(batch_size_test,3,1,1) # 3 channels
@@ -32,18 +33,22 @@ train_loader = DataLoader(
                                transform=torchvision.transforms.Compose(
                                    [torchvision.transforms.Grayscale(num_output_channels=1),
                                     torchvision.transforms.ToTensor(),
-                                    torchvision.transforms.Resize((image_size,image_size))])),
+                                    torchvision.transforms.Resize((image_size,image_size)),
+                                    blurTransfrom(0, 2.5, 5, 1)])),
     batch_size=batch_size_train, shuffle=True)
 
 test_loader = DataLoader(
     torchvision.datasets.ImageFolder(data_path_test,
                                transform=torchvision.transforms.Compose(
                                    [torchvision.transforms.ToTensor(),
-                                    torchvision.transforms.Resize((image_size,image_size))])),
+                                    torchvision.transforms.Resize((image_size,image_size)),
+                                    blurTransfrom(0, 2.5, 5, 3)])),
     batch_size=batch_size_test, shuffle=False)
 
 print('Generating Net...')
-Net = ButterFlyNet_DEBLUR(image_size,net_layer,cheb_num,True).cuda()
+Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,False).cuda()
+if distill:
+    Net.distill(200)
 print('Done.')
 optimizer = torch.optim.Adam(Net.parameters(), lr=learning_rate)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.98, patience=100, verbose=True,
@@ -66,9 +71,8 @@ print('Traing Begins.')
 for epoch in range(epochs):
     for step, (image, label) in enumerate(train_loader):
         with torch.no_grad():
-            image = image.cuda()
-            fourierimage = torch.fft.fft2(image).cuda()
-            bluredimage = (torch.fft.ifft2(fourierimage*torch.fft.fft2(blurkernel_train,(image_size, image_size)))).real
+            image = image[0].cuda()
+            bluredimage = image[1].cuda()
         optimizer.zero_grad()
         output = Net(bluredimage)
         loss = torch.norm(output - image) / torch.norm(image)

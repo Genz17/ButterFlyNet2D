@@ -11,9 +11,8 @@ def test_denoising(test_loader,batch_size,Net,noise_mean,noise_std,image_size,lo
         with torch.no_grad():
             lap_time = image_size // local_size
             pileNImage = torch.zeros((batch_size * (lap_time ** 2), 3, local_size, local_size)).cuda()
-            image = image.cuda()
-            noise = torch.normal(mean=noise_mean,std=noise_std,size=(batch_size,1,image_size,image_size),device='cuda:0')
-            Nimage = image + noise
+            image = image[0].cuda()
+            Nimage = image[1].cuda()
 
             for ii in range(lap_time ** 2):
                 pileNImage[ii * batch_size:(ii + 1) * batch_size, :, :, :] = Nimage[:, :,

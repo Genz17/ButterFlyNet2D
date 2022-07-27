@@ -9,9 +9,8 @@ sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Nets')))
 def test_deblurring(test_loader,batch_size,Net,blurkernel_test,image_size):
     for step, (image, label) in enumerate(test_loader):
         with torch.no_grad():
-            image = image.cuda()
-            fourierimage = torch.fft.fft2(image).cuda()
-            bluredimage = (torch.fft.ifft2(fourierimage*torch.fft.fft2(blurkernel_test,(image_size, image_size)))).real
+            image = image[0].cuda()
+            bluredimage = image[1].cuda()
             output = torch.zeros((batch_size,3,image_size,image_size), device='cuda:0')
         for i in range(3):
             output[:,i:i+1,:,:] = Net(bluredimage[:,i:i+1,:,:])
