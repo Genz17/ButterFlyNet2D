@@ -33,14 +33,14 @@ def test_inpainting(test_loader,batch_size,Net,mask,image_size,local_size):
                                         
         print('Before PSNR: {}, \t After PSNR: {}'.format(before, after))
 
-        fig = plt.figure()
-        plt.imshow(torch.permute(image[0].cpu(), (1, 2, 0)))
-        plt.savefig('origin.png')
+        # fig = plt.figure()
+        # plt.imshow(torch.permute(image[0].cpu(), (1, 2, 0)))
+        # plt.savefig('origin.png')
 
-        fig = plt.figure()
-        plt.imshow(torch.permute((maskedimage[0].cpu()), (1, 2, 0)))
-        plt.savefig('operated.png')
+        # fig = plt.figure()
+        # plt.imshow(torch.permute((maskedimage[0].cpu()), (1, 2, 0)))
+        # plt.savefig('operated.png')
 
-        fig = plt.figure()
-        plt.imshow((np.transpose((output_done.cpu().detach().numpy()[0]), (1, 2, 0))))
-        plt.savefig('test.png')
+        # fig = plt.figure()
+        # plt.imshow((np.transpose((output_done.cpu().detach().numpy()[0]), (1, 2, 0))))
+        # plt.savefig('test.png')

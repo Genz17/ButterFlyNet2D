@@ -6,7 +6,7 @@ import numpy as np
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Funcs')))
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Nets')))
 
-def test_deblurring(test_loader,batch_size,Net,blurkernel_test,image_size):
+def test_deblurring(test_loader,batch_size,Net,image_size):
     for step, (image, label) in enumerate(test_loader):
         with torch.no_grad():
             image = image[0].cuda()
@@ -22,14 +22,14 @@ def test_deblurring(test_loader,batch_size,Net,blurkernel_test,image_size):
                                         
         print('Before PSNR: {}, \t After PSNR: {}'.format(before, after))
 
-        fig = plt.figure()
-        plt.imshow(torch.permute(image[0].cpu(), (1, 2, 0)))
-        plt.savefig('origin.png')
+        # fig = plt.figure()
+        # plt.imshow(torch.permute(image[0].cpu(), (1, 2, 0)))
+        # plt.savefig('origin.png')
 
-        fig = plt.figure()
-        plt.imshow(torch.permute((bluredimage[0].cpu()), (1, 2, 0)))
-        plt.savefig('operated.png')
+        # fig = plt.figure()
+        # plt.imshow(torch.permute((bluredimage[0].cpu()), (1, 2, 0)))
+        # plt.savefig('operated.png')
 
-        fig = plt.figure()
-        plt.imshow((np.transpose((output.cpu().detach().numpy()[0]), (1, 2, 0))))
-        plt.savefig('test.png')
+        # fig = plt.figure()
+        # plt.imshow((np.transpose((output.cpu().detach().numpy()[0]), (1, 2, 0))))
+        # plt.savefig('test.png')

@@ -6,7 +6,7 @@ import numpy as np
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Funcs')))
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Nets')))
 
-def test_denoising(test_loader,batch_size,Net,noise_mean,noise_std,image_size,local_size):
+def test_denoising(test_loader,batch_size,Net,image_size,local_size):
     for step, (image, label) in enumerate(test_loader):
         with torch.no_grad():
             lap_time = image_size // local_size
@@ -34,14 +34,14 @@ def test_denoising(test_loader,batch_size,Net,noise_mean,noise_std,image_size,lo
 
         print('Before PSNR: {}, \t After PSNR: {}'.format(before, after))
 
-        fig = plt.figure()
-        plt.imshow(torch.permute(image[0].cpu(), (1, 2, 0)))
-        plt.savefig('origin.png')
+        # fig = plt.figure()
+        # plt.imshow(torch.permute(image[0].cpu(), (1, 2, 0)))
+        # plt.savefig('origin.png')
 
-        fig = plt.figure()
-        plt.imshow(torch.permute((Nimage[0].cpu()), (1, 2, 0)))
-        plt.savefig('operated.png')
+        # fig = plt.figure()
+        # plt.imshow(torch.permute((Nimage[0].cpu()), (1, 2, 0)))
+        # plt.savefig('operated.png')
 
-        fig = plt.figure()
-        plt.imshow((np.transpose((output_done.cpu().detach().numpy()[0]), (1, 2, 0))))
-        plt.savefig('recovered.png')
+        # fig = plt.figure()
+        # plt.imshow((np.transpose((output_done.cpu().detach().numpy()[0]), (1, 2, 0))))
+        # plt.savefig('recovered.png')

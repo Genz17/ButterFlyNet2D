@@ -6,12 +6,19 @@ import torch
 import torchvision
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
-from Mask import squareMask64,lineMask256,squareMask128,squareMask256
+
+from MaskTransform  import maskTransfrom
+from BlurTransform  import blurTransfrom
+from NoiseTransform import noiseTransfrom
+
 import numpy as np
-from ButterFlyNet_INPAINT import ButterFlyNet_INPAINT
-from ButterFlyNet_DENOISE import ButterFlyNet_DENOISE
+from ButterFlyNet_Identical import ButterFlyNet_Identical
+
+
+
 from inpaint_test_func import *
 from denoise_test_func import *
+from deblur_test_func  import *
 
 testTypeList = ['inpainting','denoising','deblurring']
 testType = testTypeList[0]
@@ -25,18 +32,21 @@ net_layer = 6 # should be no more than log_2(local_size)
 cheb_num = 4
 
 print('Generating Net...')
-if testType == 'inpainting':
-    Net = ButterFlyNet_INPAINT(local_size, net_layer, cheb_num, False).cuda()
-elif testType == 'denoising':
-    Net = ButterFlyNet_DENOISE(local_size, net_layer, cheb_num, False).cuda()
-elif testType == 'deblurring':
-    pass
+Net = ButterFlyNet_Identical(image_size, layer, chebNum, False)
 print('Done.')
+
+if testType == 'inpainting':
+    transformCompose = 
+elif testType == 'denoising':
+
+else:
+
 test_loader = DataLoader(
     torchvision.datasets.ImageFolder(root=data_path,
                                transform=torchvision.transforms.Compose(
                                    [torchvision.transforms.ToTensor(),
-                                    torchvision.transforms.Resize((image_size,image_size))])),
+                                    torchvision.transforms.Resize((image_size,image_size)),
+                                    ])),
     batch_size=batch_size, shuffle=False)
 print('Loading parameters...')
 Net.load_state_dict(torch.load(para_path))
