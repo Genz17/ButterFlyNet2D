@@ -62,7 +62,7 @@ test_loader = DataLoader(
 print('Generating Net...')
 Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,prefix).cuda()
 if pretrain:
-    Net.pretrin(200)
+    Net.pretrain(200)
 print('Done.')
 
 num = 0
