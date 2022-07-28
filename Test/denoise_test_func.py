@@ -7,12 +7,12 @@ sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Funcs')))
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Nets')))
 
 def test_denoising(test_loader,batch_size,Net,image_size,local_size):
-    for step, (image, label) in enumerate(test_loader):
+    for step, (Totalimage, label) in enumerate(test_loader):
         with torch.no_grad():
             lap_time = image_size // local_size
             pileNImage = torch.zeros((batch_size * (lap_time ** 2), 3, local_size, local_size)).cuda()
-            image = image[0].cuda()
-            Nimage = image[1].cuda()
+            image = Totalimage[0].cuda()
+            Nimage = Totalimage[1].cuda()
 
             for ii in range(lap_time ** 2):
                 pileNImage[ii * batch_size:(ii + 1) * batch_size, :, :, :] = Nimage[:, :,

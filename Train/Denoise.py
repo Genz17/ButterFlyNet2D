@@ -10,6 +10,9 @@ from ButterFlyNet_Identical import ButterFlyNet_Identical
 from denoise_test_func import test_denoising
 from NoiseTransform import noiseTransfrom
 from LossDraw import LossPlot
+from SeedSetup import setup_seed
+
+setup_seed(17)
 
 #### Here are the settings to the training ###
 print('Train Settings: \nepochs: {}, batchSize: {}; \nimageSize: {}, localSize: {}; \

@@ -7,12 +7,14 @@ sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Funcs')))
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Nets')))
 
 def test_inpainting(test_loader,batch_size,Net,image_size,local_size):
-    for step, (image, label) in enumerate(test_loader):
+    for step, (Totalimage, label) in enumerate(test_loader):
         with torch.no_grad():
             lap_time = image_size // local_size
             overlapMasked = torch.zeros((batch_size * (lap_time ** 2), 3, local_size, local_size)).cuda()
-            image = image[0].cuda()
-            maskedimage = image[1].cuda()
+            image = Totalimage[0].cuda()
+            maskedimage = Totalimage[1].cuda()
+            print(image.shape)
+            print(maskedimage.shape)
 
             for ii in range(lap_time ** 2):
                 overlapMasked[ii * batch_size:(ii + 1) * batch_size, :, :, :] = maskedimage[:, :,

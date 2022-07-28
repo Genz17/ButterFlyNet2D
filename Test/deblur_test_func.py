@@ -7,10 +7,10 @@ sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Funcs')))
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Nets')))
 
 def test_deblurring(test_loader,batch_size,Net,image_size):
-    for step, (image, label) in enumerate(test_loader):
+    for step, (Totalimage, label) in enumerate(test_loader):
         with torch.no_grad():
-            image = image[0].cuda()
-            bluredimage = image[1].cuda()
+            image = Totalimage[0].cuda()
+            bluredimage = Totalimage[1].cuda()
             output = torch.zeros((batch_size,3,image_size,image_size), device='cuda:0')
         for i in range(3):
             output[:,i:i+1,:,:] = Net(bluredimage[:,i:i+1,:,:])

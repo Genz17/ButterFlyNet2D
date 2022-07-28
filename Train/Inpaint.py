@@ -13,6 +13,9 @@ from ButterFlyNet_Identical import ButterFlyNet_Identical
 from inpaint_test_func import test_inpainting
 from MaskTransform import maskTransfrom
 from LossDraw import LossPlot
+from SeedSetup import setup_seed
+
+setup_seed(17)
 
 #### Here are the settings to the training ###
 print('\nTrain Settings: \nepochs: {}, batchSize: {}; \
@@ -36,7 +39,7 @@ pretrain            = eval(sys.argv[8])
 batch_size_test = 256
 learning_rate = 0.002
 data_path_train = '../../data/celebaselected/' # choose the path where your data is located
-data_path_test = '../../data/CelebaTest/' # choose the path where your data is located
+data_path_test = '../../CelebaTest/' # choose the path where your data is located
 pile_time = image_size // local_size
 lossList = []
 

@@ -13,6 +13,9 @@ from ButterFlyNet_Identical import ButterFlyNet_Identical
 from deblur_test_func import test_deblurring
 from BlurTransform import blurTransfrom
 from LossDraw import LossPlot
+from SeedSetup import setup_seed
+
+setup_seed(17)
 
 #### Here are the settings to the training ###
 print('Train Settings: \nepochs: {}, batchSize: {}; \
