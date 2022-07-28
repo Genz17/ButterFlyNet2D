@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader
 from ButterFlyNet_Identical import ButterFlyNet_Identical
 from deblur_test_func import test_deblurring
 from BlurTransform import blurTransfrom
-import matplotlib.pyplot as plt
+from LossDraw import LossPlot
 
 #### Here are the settings to the training ###
 print('Train Settings: \nepochs: {}, batchSize: {}; \
@@ -39,6 +39,7 @@ batch_size_test = 256
 learning_rate = 0.002
 data_path_train = '../../data/celebaselected/' # choose the path where your data is located
 data_path_test = '../../CelebaTest/' # choose the path where your data is located
+lossList = []
 
 train_loader = DataLoader(
     torchvision.datasets.ImageFolder(data_path_train,
@@ -88,6 +89,8 @@ for epoch in range(epochs):
         optimizer.zero_grad()
         output = Net(bluredimage)
         loss = torch.norm(output - image) / torch.norm(image)
+        if step % 50 == 0:
+            lossList.append(loss.item())
         loss.backward()
         optimizer.step()
         scheduler.step(loss)
@@ -105,15 +108,27 @@ for epoch in range(epochs):
             if pretrain:
                 torch.save(Net.state_dict(),
                 '../../Pths/Deblur/prefix/pretrain/{}_{}_{}_{}_{}_{}_Celeba_deblurring.pth'.format(local_size,image_size,net_layer,cheb_num,std,kerNelSize))
+
+                LossPlot([i*50 for i in range(len(lossList))], lossList, epochs,
+                    '../../Images/Deblur/prefix/pretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
             else:
                 torch.save(Net.state_dict(),
                 '../../Pths/Deblur/prefix/nopretrain/{}_{}_{}_{}_{}_{}_Celeba_deblurring.pth'.format(local_size,image_size,net_layer,cheb_num,std,kerNelSize))
+
+                LossPlot([i*50 for i in range(len(lossList))], lossList, epochs,
+                    '../../Images/Deblur/prefix/nopretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
         else:
             if pretrain:
                 torch.save(Net.state_dict(),
                 '../../Pths/Deblur/noprefix/pretrain/{}_{}_{}_{}_{}_{}_Celeba_deblurring.pth'.format(local_size,image_size,net_layer,cheb_num,std,kerNelSize))
+
+                LossPlot([i*50 for i in range(len(lossList))], lossList, epochs,
+                    '../../Images/Deblur/noprefix/pretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
             else:
                 torch.save(Net.state_dict(),
                 '../../Pths/Deblur/noprefix/nopretrain/{}_{}_{}_{}_{}_{}_Celeba_deblurring.pth'.format(local_size,image_size,net_layer,cheb_num,std,kerNelSize))
+
+                LossPlot([i*50 for i in range(len(lossList))], lossList, epochs,
+                    '../../Images/Deblur/noprefix/nopretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
         print('Done.')
 print('Training is Done.')

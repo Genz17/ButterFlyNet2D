@@ -12,6 +12,7 @@ from torch.utils.data import DataLoader
 from ButterFlyNet_Identical import ButterFlyNet_Identical
 from inpaint_test_func import test_inpainting
 from MaskTransform import maskTransfrom
+from LossDraw import LossPlot
 
 #### Here are the settings to the training ###
 print('\nTrain Settings: \nepochs: {}, batchSize: {}; \
@@ -37,6 +38,7 @@ learning_rate = 0.002
 data_path_train = '../../data/celebaselected/' # choose the path where your data is located
 data_path_test = '../../data/CelebaTest/' # choose the path where your data is located
 pile_time = image_size // local_size
+lossList = []
 
 
 train_loader = DataLoader(
@@ -98,6 +100,8 @@ for epoch in range(epochs):
         optimizer.zero_grad()
         output = Net(pileImageMasked)
         loss = torch.norm(output - pileImage) / torch.norm(pileImage)
+        if step % 50 == 0:
+            lossList.append(loss.item())
         loss.backward()
         optimizer.step()
         scheduler.step(loss)
@@ -114,16 +118,29 @@ for epoch in range(epochs):
             if pretrain:
                 torch.save(Net.state_dict(),
                 '../../Pths/Inpaint/prefix/pretrain/{}_{}_{}_{}_Celeba_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num))
+
+                LossPlot([i*50 for i in range(len(lossList))], lossList, range(epochs), 
+                '../../Images/Inpaint/prefix/pretrain/{}_{}_{}_{}_Celeba_square_inpainting.eps'.format(local_size,image_size,net_layer,cheb_num))
             else:
                 torch.save(Net.state_dict(),
                 '../../Pths/Inpaint/prefix/nopretrain/{}_{}_{}_{}_Celeba_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num))
+
+                LossPlot([i*50 for i in range(len(lossList))], lossList, range(epochs), 
+                '../../Images/Inpaint/prefix/nopretrain/{}_{}_{}_{}_Celeba_square_inpainting.eps'.format(local_size,image_size,net_layer,cheb_num))
         else:
             if pretrain:
                 torch.save(Net.state_dict(),
                 '../../Pths/Inapint/noprefix/pretrain/{}_{}_{}_{}_Celeba_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num))
+
+                LossPlot([i*50 for i in range(len(lossList))], lossList, range(epochs), 
+                '../../Images/Inpaint/noprefix/pretrain/{}_{}_{}_{}_Celeba_square_inpainting.eps'.format(local_size,image_size,net_layer,cheb_num))
             else:
                 torch.save(Net.state_dict(),
                 '../../Pths/Inpaint/noprefix/nopretrain/{}_{}_{}_{}_Celeba_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num))
+
+                LossPlot([i*50 for i in range(len(lossList))], lossList, range(epochs), 
+                '../../Images/Inpaint/noprefix/nopretrain/{}_{}_{}_{}_Celeba_square_inpainting.eps'.format(local_size,image_size,net_layer,cheb_num))
         print('Done.')
+
 
 print('Training is Done.')

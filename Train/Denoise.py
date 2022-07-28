@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader
 from ButterFlyNet_Identical import ButterFlyNet_Identical
 from denoise_test_func import test_denoising
 from NoiseTransform import noiseTransfrom
+from LossDraw import LossPlot
 
 #### Here are the settings to the training ###
 print('Train Settings: \nepochs: {}, batchSize: {}; \nimageSize: {}, localSize: {}; \
@@ -39,6 +40,8 @@ learning_rate = 0.002
 data_path_train = '../../data/celebaselected/' # choose the path where your data is located
 data_path_test = '../../data/CelebaTest/' # choose the path where your data is located
 pile_time = image_size // local_size
+lossList = []
+
 
 train_loader = DataLoader(
     torchvision.datasets.ImageFolder(data_path_train,
@@ -100,9 +103,12 @@ for epoch in range(epochs):
         optimizer.zero_grad()
         output = Net(pileNImage)
         loss = torch.norm(output - pileImage) / torch.norm(pileImage)
+        if step % 50 == 0:
+            lossList.append(loss.item())
         loss.backward()
         optimizer.step()
         scheduler.step(loss)
+
         print('Denoise: image size {} Train Epoch: {}, [{}/{} ({:.2f}%)]\tLoss: {:.6f}'.format(image_size,epoch, step * len(image),
                                                                         len(train_loader.dataset),
                                                                         100 * step / len(train_loader),
@@ -115,16 +121,28 @@ for epoch in range(epochs):
                 if pretrain:
                     torch.save(Net.state_dict(),
                     '../../Pths/Denoise/prefix/pretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
+
+                    LossPlot([i*50 for i in range(len(lossList))], lossList, epochs,
+                    '../../Images/Denoise/prefix/pretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
                 else:
                     torch.save(Net.state_dict(),
                     '../../Pths/Denoise/prefix/nopretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
+
+                    LossPlot([i*50 for i in range(len(lossList))], lossList, epochs,
+                    '../../Images/Denoise/prefix/nopretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
             else:
                 if pretrain:
                     torch.save(Net.state_dict(),
                     '../../Pths/Denoise/noprefix/pretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
+
+                    LossPlot([i*50 for i in range(len(lossList))], lossList, epochs,
+                    '../../Images/Denoise/noprefix/pretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
                 else:
                     torch.save(Net.state_dict(),
                     '../../Pths/Denoise/noprefix/nopretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
+
+                    LossPlot([i*50 for i in range(len(lossList))], lossList, epochs,
+                    '../../Images/Denoise/noprefix/nopretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
             print('Done.')
 print('Training is Done.')
 
