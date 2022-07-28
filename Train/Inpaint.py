@@ -9,27 +9,33 @@ sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Test')))
 import torch
 import torchvision
 from torch.utils.data import DataLoader
-from Mask import squareMask32,squareMask64,squareMask128,squareMask256,squareMask1024,lineMask256,randomMask
 from ButterFlyNet_Identical import ButterFlyNet_Identical
 from inpaint_test_func import test_inpainting
 from MaskTransform import maskTransfrom
 import matplotlib.pyplot as plt
 
 #### Here are the settings to the training ###
-epochs = 5
-batch_size_train = 50
+print('Train Settings: \nepochs: {}, batchSize: {}; \nimageSize: {}, localSize: {}; \nnetLayer: {}, chebNum: {}.'.format(sys.argv[1],
+                                                                                                                        sys.argv[2],
+                                                                                                                        sys.argv[3],
+                                                                                                                        sys.argv[4],
+                                                                                                                        sys.argv[5],
+                                                                                                                        sys.argv[6]))
+epochs              = int(sys.argv[1])
+batch_size_train    = int(sys.argv[2])
+image_size          = int(sys.argv[3]) # the image size
+local_size          = int(sys.argv[4]) # size the network deals
+net_layer           = int(sys.argv[5]) # should be no more than log_2(local_size)
+cheb_num            = int(sys.argv[6])
+
+
 batch_size_test = 256
 learning_rate = 0.002
 data_path_train = '../../data/celebaselected/' # choose the path where your data is located
 data_path_test = '../../data/CelebaTest/' # choose the path where your data is located
-image_size = 32 # the image size
-local_size = 64 # size the network deals
 pile_time = image_size // local_size
-net_layer = 6 # should be no more than log_2(local_size)
-cheb_num = 2
+
 distill = True
-mask_train = eval('squareMask'+str(image_size))(torch.zeros(batch_size_train,1,image_size,image_size)).cuda()
-mask_test = eval('squareMask'+str(image_size))(torch.zeros(batch_size_test,3,image_size,image_size)).cuda()
 
 train_loader = DataLoader(
     torchvision.datasets.ImageFolder(data_path_train,
@@ -60,7 +66,7 @@ for para in Net.parameters():
 print('The number of paras in the network is {}.'.format(num))
 
 optimizer = torch.optim.Adam(Net.parameters(), lr=learning_rate)
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.99, patience=100, verbose=True,
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.95, patience=100, verbose=True,
                                                          threshold=0.00005, threshold_mode='rel', cooldown=3, min_lr=0, eps=1e-16)
 ##############################################
 

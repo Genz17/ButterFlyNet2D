@@ -14,15 +14,25 @@ from deblur_test_func import test_deblurring
 from BlurTransform import blurTransfrom
 
 #### Here are the settings to the training ###
-epochs = 30
-batch_size_train = 30
+print('Train Settings: \nepochs: {}, batchSize: {}; \nimageSize: {}; \nnetLayer: {}, chebNum: {}; \nkernelSize: {}, std: {}.'.format(sys.argv[1],
+                                                                                                                        sys.argv[2],
+                                                                                                                        sys.argv[3],
+                                                                                                                        sys.argv[4],
+                                                                                                                        sys.argv[5],
+                                                                                                                        sys.argv[6],
+                                                                                                                        sys.argv[7]))
+epochs              = int(sys.argv[1])
+batch_size_train    = int(sys.argv[2])
+image_size          = int(sys.argv[3]) # the image size
+net_layer           = int(sys.argv[5]) # should be no more than log_2(local_size)
+cheb_num            = int(sys.argv[6])
+kerNelSize          = int(sys.argv[7])
+std                 = float(sys.argv[8])
+
 batch_size_test = 256
-learning_rate = 0.001
+learning_rate = 0.002
 data_path_train = '../../data/celebaselected/' # choose the path where your data is located
 data_path_test = '../../data/CelebaTest/' # choose the path where your data is located
-image_size = 64 # the image size
-net_layer = 6 # should be no more than log_2(local_size)
-cheb_num = 4
 distill = True
 
 train_loader = DataLoader(
@@ -31,7 +41,7 @@ train_loader = DataLoader(
                                    [torchvision.transforms.Grayscale(num_output_channels=1),
                                     torchvision.transforms.ToTensor(),
                                     torchvision.transforms.Resize((image_size,image_size)),
-                                    blurTransfrom(0, 2.5, 5, 1)])),
+                                    blurTransfrom(0, std, kerNelSize, 1)])),
     batch_size=batch_size_train, shuffle=True)
 
 test_loader = DataLoader(
@@ -39,7 +49,7 @@ test_loader = DataLoader(
                                transform=torchvision.transforms.Compose(
                                    [torchvision.transforms.ToTensor(),
                                     torchvision.transforms.Resize((image_size,image_size)),
-                                    blurTransfrom(0, 2.5, 5, 3)])),
+                                    blurTransfrom(0, std, kerNelSize, 3)])),
     batch_size=batch_size_test, shuffle=False)
 
 print('Generating Net...')
@@ -48,7 +58,7 @@ if distill:
     Net.distill(200)
 print('Done.')
 optimizer = torch.optim.Adam(Net.parameters(), lr=learning_rate)
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.98, patience=100, verbose=True,
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.95, patience=100, verbose=True,
                                                          threshold=0.00005, threshold_mode='rel', cooldown=3, min_lr=0, eps=1e-16)
 
 num = 0

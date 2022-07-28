@@ -6,16 +6,16 @@ This is a repository for ButterFlyNet2D.
 Core neural networks are stored here.
 
 - **ButterFlyNet2D, ButterFlyNet2D_IDFT**
-These are a pair of neural networks that put the non-zero parameters in Butterfly Algorithm into CNN. ButterFlyNet2D is for FT, meanwhile ButterFlyNet2D_IDFT is for DFT.  
+These are a pair of neural networks that put the non-zero parameters in Butterfly Algorithm into CNN. ButterFlyNet2D is for DFT, meanwhile ButterFlyNet2D_IDFT is for IDFT.  
 
 - **ButterFlyNet2D_CNN, ButterFlyNet2D_CNN_IDFT**
-These are a pair of neural networks that put all the parameters in Butterfly Algorithm into CNN. ButterFlyNet2D_CNN is for FT, meanwhile ButterFlyNet2D_CNN_IDFT is for DFT.
+These are a pair of neural networks that put all the parameters in Butterfly Algorithm into CNN. ButterFlyNet2D_CNN is for DFT, meanwhile ButterFlyNet2D_CNN_IDFT is for IDFT.
 
 - **ButterFlyNet2D_Flexible, ButterFlyNet2D_Flexible_IDFT**
-These are a pair of neural networks that put the non-zero parameters in Butterfly Algorithm into CNN. ButterFlyNet2D is for FT, meanwhile ButterFlyNet2D_IDFT is for DFT. But the implementation make the stride from bigger than 1 into 1.
+These are a pair of neural networks that put the non-zero parameters in Butterfly Algorithm into CNN. ButterFlyNet2D is for DFT, meanwhile ButterFlyNet2D_IDFT is for IDFT. But the implementation make the stride from bigger than 1 into 1.
 
 - **ButterFlyNet2D_CNN_Flexible**
-This is a neural network that put all the parameters in Butterfly Algorithm into CNN. ButterFlyNet2D_CNN is for FT. But the implementation make the stride from bigger than 1 into 1.
+This is a neural network that put all the parameters in Butterfly Algorithm into CNN. ButterFlyNet2D_CNN is for DFT. But the implementation make the stride from bigger than 1 into 1.
 
 - **ButterFlyNet2D_Identicle**
   Assembles the ButterFlyNet2D and ButterFlyNet2D_IDFT into one whole neural network.

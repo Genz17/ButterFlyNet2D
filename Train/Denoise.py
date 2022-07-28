@@ -9,18 +9,29 @@ from ButterFlyNet_Identical import ButterFlyNet_Identical
 from NoiseTransform import noiseTransfrom
 
 #### Here are the settings to the training ###
-epochs = 15
-batch_size = 50
+print('Train Settings: \nepochs: {}, batchSize: {}; \nimageSize: {}, localSize: {}; \nnetLayer: {}, chebNum: {}; \nmean: {}, std: {}.'.format(sys.argv[1],
+                                                                                                                        sys.argv[2],
+                                                                                                                        sys.argv[3],
+                                                                                                                        sys.argv[4],
+                                                                                                                        sys.argv[5],
+                                                                                                                        sys.argv[6],
+                                                                                                                        sys.argv[7],
+                                                                                                                        sys.argv[8]))
+epochs              = int(sys.argv[1])
+batch_size_train    = int(sys.argv[2])
+image_size          = int(sys.argv[3]) # the image size
+local_size          = int(sys.argv[4]) # size the network deals
+net_layer           = int(sys.argv[5]) # should be no more than log_2(local_size)
+cheb_num            = int(sys.argv[6])
+noise_mean          = int(sys.argv[7])
+noise_std           = float(sys.argv[8])
+
+batch_size_test = 256
 learning_rate = 0.002
 data_path_train = '../../data/celebaselected/' # choose the path where your data is located
 data_path_test = '../../data/CelebaTest/' # choose the path where your data is located
-local_size = 64
-image_size = 64
 pile_time = image_size // local_size
-net_layer = 6 # should be no more than log_2(local_size)
-cheb_num = 2
-noise_mean = 0
-noise_std = 0.1
+
 distill = True
 
 train_loader = DataLoader(
@@ -29,8 +40,8 @@ train_loader = DataLoader(
                                    [torchvision.transforms.Grayscale(num_output_channels=1),
                                     torchvision.transforms.ToTensor(),
                                     torchvision.transforms.Resize((image_size,image_size)),
-                                    noiseTransfrom(0, 0.1)])),
-    batch_size=batch_size, shuffle=True)
+                                    noiseTransfrom(noise_mean, noise_std)])),
+    batch_size=batch_size_train, shuffle=True)
 
 test_loader = DataLoader(
     torchvision.datasets.ImageFolder(data_path_test,
@@ -38,8 +49,8 @@ test_loader = DataLoader(
                                    [torchvision.transforms.Grayscale(num_output_channels=1),
                                     torchvision.transforms.ToTensor(),
                                     torchvision.transforms.Resize((image_size,image_size)),
-                                    noiseTransfrom(0, 0.1)])),
-    batch_size=batch_size, shuffle=True)
+                                    noiseTransfrom(noise_mean, noise_std)])),
+    batch_size=batch_size_test, shuffle=False)
 
 print('Generating Net...')
 Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,True).cuda()
@@ -47,7 +58,7 @@ if distill:
     Net.distill(200)
 print('Done.')
 optimizer = torch.optim.Adam(Net.parameters(), lr=learning_rate)
-scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.99, patience=100, verbose=True,
+scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.95, patience=100, verbose=True,
                                                          threshold=0.00005, threshold_mode='rel', cooldown=3, min_lr=0, eps=1e-16)
 ##############################################
 
