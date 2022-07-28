@@ -85,10 +85,9 @@ print('Done.')
 
 print('Traing Begins.')
 for epoch in range(epochs):
-    for step, (image, label) in enumerate(train_loader):
-        with torch.no_grad():
-            image = image[0].cuda()
-            bluredimage = image[1].cuda()
+    for step, (Totalimage, label) in enumerate(train_loader):
+        image = Totalimage[0].cuda()
+        bluredimage = Totalimage[1].cuda()
         optimizer.zero_grad()
         output = Net(bluredimage)
         loss = torch.norm(output - image) / torch.norm(image)

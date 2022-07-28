@@ -89,13 +89,13 @@ print('Done.')
 print('Training Begins.')
 
 for epoch in range(epochs):
-    for step, (image, label) in enumerate(train_loader):
+    for step, (Totalimage, label) in enumerate(train_loader):
         with torch.no_grad():
 
             pileImage = torch.zeros((batch_size * (pile_time ** 2), 1, local_size, local_size)).cuda()
             pileNImage = torch.zeros((batch_size * (pile_time ** 2), 1, local_size, local_size)).cuda()
-            image = image[0].cuda()
-            Nimage = image[1].cuda()
+            image = Totalimage[0].cuda()
+            Nimage = Totalimage[1].cuda()
             for ii in range(pile_time ** 2):
                 pileImage[ii * batch_size:(ii + 1) * batch_size, :, :, :] = image[:, :,
                                                                           (ii // pile_time) * (local_size):(ii // pile_time) * (local_size) + local_size,
