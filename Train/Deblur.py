@@ -12,6 +12,7 @@ from torch.utils.data import DataLoader
 from ButterFlyNet_Identical import ButterFlyNet_Identical
 from deblur_test_func import test_deblurring
 from BlurTransform import blurTransfrom
+import matplotlib.pyplot as plt
 
 #### Here are the settings to the training ###
 print('Train Settings: \nepochs: {}, batchSize: {}; \nimageSize: {}; \nnetLayer: {}, chebNum: {}; \nkernelSize: {}, std: {}.'.format(sys.argv[1],
@@ -32,7 +33,7 @@ std                 = float(sys.argv[8])
 batch_size_test = 256
 learning_rate = 0.002
 data_path_train = '../../data/celebaselected/' # choose the path where your data is located
-data_path_test = '../../data/CelebaTest/' # choose the path where your data is located
+data_path_test = '../../CelebaTest/' # choose the path where your data is located
 distill = True
 
 train_loader = DataLoader(
@@ -51,6 +52,13 @@ test_loader = DataLoader(
                                     torchvision.transforms.Resize((image_size,image_size)),
                                     blurTransfrom(0, std, kerNelSize, 3)])),
     batch_size=batch_size_test, shuffle=False)
+for step, (x,y) in enumerate(test_loader):
+
+    plt.imshow(torch.permute(x[0][0], (1, 2, 0)))
+    plt.show()
+
+    plt.imshow(torch.permute(x[1][0], (1, 2, 0)))
+    plt.show()
 
 print('Generating Net...')
 Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,False).cuda()

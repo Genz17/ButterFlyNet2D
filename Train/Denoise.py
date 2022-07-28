@@ -2,11 +2,14 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Funcs')))
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Nets')))
+sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Test')))
 import torch
 import torchvision
 from torch.utils.data import DataLoader
 from ButterFlyNet_Identical import ButterFlyNet_Identical
+from denoise_test_func import test_denoising
 from NoiseTransform import noiseTransfrom
+import matplotlib.pyplot as plt
 
 #### Here are the settings to the training ###
 print('Train Settings: \nepochs: {}, batchSize: {}; \nimageSize: {}, localSize: {}; \nnetLayer: {}, chebNum: {}; \nmean: {}, std: {}.'.format(sys.argv[1],
@@ -46,8 +49,7 @@ train_loader = DataLoader(
 test_loader = DataLoader(
     torchvision.datasets.ImageFolder(data_path_test,
                                transform=torchvision.transforms.Compose(
-                                   [torchvision.transforms.Grayscale(num_output_channels=1),
-                                    torchvision.transforms.ToTensor(),
+                                    [torchvision.transforms.ToTensor(),
                                     torchvision.transforms.Resize((image_size,image_size)),
                                     noiseTransfrom(noise_mean, noise_std)])),
     batch_size=batch_size_test, shuffle=False)
@@ -66,6 +68,14 @@ num = 0
 for para in Net.parameters():
     num+=torch.prod(torch.tensor(para.shape))
 print('The number of paras in the network is {}'.format(num))
+
+
+print('Test before training...')
+# Apply one test before training
+with torch.no_grad():
+    test_denoising(test_loader,batch_size_test,Net,mask_test,image_size,local_size)
+print('Done.')
+
 
 print('Training Begins.')
 
@@ -94,5 +104,11 @@ for epoch in range(epochs):
                                                                         len(train_loader.dataset),
                                                                         100 * step / len(train_loader),
                                                                         loss.item()))
+        # Apply testing every epoch
+        with torch.no_grad():
+            test_denoising(test_loader,batch_size_test,Net,mask_test,image_size,local_size)
+            print('Saving parameters...')
+            torch.save(Net.state_dict(),'{}_{}_{}_{}_Celeba_denoising'.format(image_size,local_size,noise_mean,noise_std))
+            print('Done.')
 print('Training is Done.')
-torch.save(Net.state_dict(),'{}_{}_{}_{}_Celeba_denoising'.format(image_size,local_size,noise_mean,noise_std))
+

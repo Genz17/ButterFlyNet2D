@@ -54,6 +54,7 @@ test_loader = DataLoader(
                                     maskTransfrom(image_size)])),
     batch_size=batch_size_test, shuffle=False)
 
+
 print('Generating Net...')
 Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,False).cuda()
 if distill:
