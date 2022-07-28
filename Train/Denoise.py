@@ -9,17 +9,19 @@ from torch.utils.data import DataLoader
 from ButterFlyNet_Identical import ButterFlyNet_Identical
 from denoise_test_func import test_denoising
 from NoiseTransform import noiseTransfrom
-import matplotlib.pyplot as plt
 
 #### Here are the settings to the training ###
-print('Train Settings: \nepochs: {}, batchSize: {}; \nimageSize: {}, localSize: {}; \nnetLayer: {}, chebNum: {}; \nmean: {}, std: {}.'.format(sys.argv[1],
-                                                                                                                        sys.argv[2],
-                                                                                                                        sys.argv[3],
-                                                                                                                        sys.argv[4],
-                                                                                                                        sys.argv[5],
-                                                                                                                        sys.argv[6],
-                                                                                                                        sys.argv[7],
-                                                                                                                        sys.argv[8]))
+print('Train Settings: \nepochs: {}, batchSize: {}; \nimageSize: {}, localSize: {}; \
+\nnetLayer: {}, chebNum: {}; \nmean: {}, std: {}.\nprefix: {}, pretrain: {}.\n'.format(sys.argv[1],
+                                                                                        sys.argv[2],
+                                                                                        sys.argv[3],
+                                                                                        sys.argv[4],
+                                                                                        sys.argv[5],
+                                                                                        sys.argv[6],
+                                                                                        sys.argv[7],
+                                                                                        sys.argv[8],
+                                                                                        sys.argv[9],
+                                                                                        sys.argv[10]))
 epochs              = int(sys.argv[1])
 batch_size_train    = int(sys.argv[2])
 image_size          = int(sys.argv[3]) # the image size
@@ -28,14 +30,15 @@ net_layer           = int(sys.argv[5]) # should be no more than log_2(local_size
 cheb_num            = int(sys.argv[6])
 noise_mean          = int(sys.argv[7])
 noise_std           = float(sys.argv[8])
+prefix              = eval(prefix)
+pretrain            = eval(pretrain) 
+
 
 batch_size_test = 256
 learning_rate = 0.002
 data_path_train = '../../data/celebaselected/' # choose the path where your data is located
 data_path_test = '../../data/CelebaTest/' # choose the path where your data is located
 pile_time = image_size // local_size
-
-distill = True
 
 train_loader = DataLoader(
     torchvision.datasets.ImageFolder(data_path_train,
@@ -55,9 +58,9 @@ test_loader = DataLoader(
     batch_size=batch_size_test, shuffle=False)
 
 print('Generating Net...')
-Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,True).cuda()
-if distill:
-    Net.distill(200)
+Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,prefix).cuda()
+if pretrain:
+    Net.pretrain(200)
 print('Done.')
 optimizer = torch.optim.Adam(Net.parameters(), lr=learning_rate)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.95, patience=100, verbose=True,
@@ -108,7 +111,20 @@ for epoch in range(epochs):
         with torch.no_grad():
             test_denoising(test_loader,batch_size_test,Net,mask_test,image_size,local_size)
             print('Saving parameters...')
-            torch.save(Net.state_dict(),'{}_{}_{}_{}_Celeba_denoising'.format(image_size,local_size,noise_mean,noise_std))
+            if prefix:
+                if pretrain:
+                    torch.save(Net.state_dict(),
+                    '../../Pths/Denoise/prefix/pretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
+                else:
+                    torch.save(Net.state_dict(),
+                    '../../Pths/Denoise/prefix/nopretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
+            else:
+                if pretrain:
+                    torch.save(Net.state_dict(),
+                    '../../Pths/Denoise/noprefix/pretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
+                else:
+                    torch.save(Net.state_dict(),
+                    '../../Pths/Denoise/noprefix/nopretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
             print('Done.')
 print('Training is Done.')
 

@@ -16,7 +16,7 @@ class ButterFlyNet_Identical(nn.Module):
 
         return res
 
-    def distill(self,iter):
+    def pretrain(self,iter):
         optimizer_encoder = torch.optim.Adam(self.encoderset.parameters(),1e-3)
         optimizer_decoder = torch.optim.Adam(self.decoderset.parameters(),1e-3)
         print('Fourier Transform Approximation...')

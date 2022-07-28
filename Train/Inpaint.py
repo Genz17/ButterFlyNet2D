@@ -12,22 +12,25 @@ from torch.utils.data import DataLoader
 from ButterFlyNet_Identical import ButterFlyNet_Identical
 from inpaint_test_func import test_inpainting
 from MaskTransform import maskTransfrom
-import matplotlib.pyplot as plt
 
 #### Here are the settings to the training ###
-print('Train Settings: \nepochs: {}, batchSize: {}; \nimageSize: {}, localSize: {}; \nnetLayer: {}, chebNum: {}.'.format(sys.argv[1],
-                                                                                                                        sys.argv[2],
-                                                                                                                        sys.argv[3],
-                                                                                                                        sys.argv[4],
-                                                                                                                        sys.argv[5],
-                                                                                                                        sys.argv[6]))
+print('\nTrain Settings: \nepochs: {}, batchSize: {}; \
+\nimageSize: {}, localSize: {}; \nnetLayer: {}, chebNum: {}.\nprefix: {}, pretrain: {}.\n'.format(sys.argv[1],
+                                                                                                sys.argv[2],
+                                                                                                sys.argv[3],
+                                                                                                sys.argv[4],
+                                                                                                sys.argv[5],
+                                                                                                sys.argv[6],
+                                                                                                sys.argv[7],
+                                                                                                sys.argv[8]))
 epochs              = int(sys.argv[1])
 batch_size_train    = int(sys.argv[2])
 image_size          = int(sys.argv[3]) # the image size
 local_size          = int(sys.argv[4]) # size the network deals
 net_layer           = int(sys.argv[5]) # should be no more than log_2(local_size)
 cheb_num            = int(sys.argv[6])
-
+prefix              = eval(sys.argv[7])
+pretrain            = eval(sys.argv[8])
 
 batch_size_test = 256
 learning_rate = 0.002
@@ -35,7 +38,6 @@ data_path_train = '../../data/celebaselected/' # choose the path where your data
 data_path_test = '../../data/CelebaTest/' # choose the path where your data is located
 pile_time = image_size // local_size
 
-distill = True
 
 train_loader = DataLoader(
     torchvision.datasets.ImageFolder(data_path_train,
@@ -56,9 +58,9 @@ test_loader = DataLoader(
 
 
 print('Generating Net...')
-Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,False).cuda()
-if distill:
-    Net.distill(200)
+Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,prefix).cuda()
+if pretrain:
+    Net.pretarin(200)
 print('Done.')
 
 num = 0
@@ -108,7 +110,20 @@ for epoch in range(epochs):
     with torch.no_grad():
         test_inpainting(test_loader,batch_size_test,Net,mask_test,image_size,local_size)
         print('Saving parameters...')
-        torch.save(Net.state_dict(),'../../Pths/{}_{}_Celeba_square_inpainting.pth'.format(local_size,image_size))
+        if prefix:
+            if pretrain:
+                torch.save(Net.state_dict(),
+                '../../Pths/Inpaint/prefix/pretrain/{}_{}_{}_{}_Celeba_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num))
+            else:
+                torch.save(Net.state_dict(),
+                '../../Pths/Inpaint/prefix/nopretrain/{}_{}_{}_{}_Celeba_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num))
+        else:
+            if pretrain:
+                torch.save(Net.state_dict(),
+                '../../Pths/Inapint/noprefix/pretrain/{}_{}_{}_{}_Celeba_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num))
+            else:
+                torch.save(Net.state_dict(),
+                '../../Pths/Inpaint/noprefix/nopretrain/{}_{}_{}_{}_Celeba_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num))
         print('Done.')
 
 print('Training is Done.')
