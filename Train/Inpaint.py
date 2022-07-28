@@ -78,7 +78,7 @@ scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', fa
 print('Test before training...')
 # Apply one test before training
 with torch.no_grad():
-    test_inpainting(test_loader,batch_size_test,Net,mask_test,image_size,local_size)
+    test_inpainting(test_loader,batch_size_test,Net,image_size,local_size)
 print('Done.')
 
 print('Training Begins.')

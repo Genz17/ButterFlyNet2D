@@ -79,7 +79,7 @@ print('The number of paras in the network is {}'.format(num))
 print('Test before training...')
 # Apply one test before training
 with torch.no_grad():
-    test_denoising(test_loader,batch_size_test,Net,mask_test,image_size,local_size)
+    test_denoising(test_loader,batch_size_test,Net,image_size,local_size)
 print('Done.')
 
 

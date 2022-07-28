@@ -77,7 +77,7 @@ print('The number of paras in the network is {}.'.format(num))
 # Test before training
 print('Test before training...')
 with torch.no_grad():
-    test_deblurring(test_loader, batch_size_test, Net, blurkernel_test, image_size)
+    test_deblurring(test_loader, batch_size_test, Net, image_size)
 print('Done.')
 
 print('Traing Begins.')

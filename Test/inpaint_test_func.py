@@ -6,7 +6,7 @@ import numpy as np
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Funcs')))
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Nets')))
 
-def test_inpainting(test_loader,batch_size,Net,mask,image_size,local_size):
+def test_inpainting(test_loader,batch_size,Net,image_size,local_size):
     for step, (image, label) in enumerate(test_loader):
         with torch.no_grad():
             lap_time = image_size // local_size
