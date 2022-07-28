@@ -118,7 +118,7 @@ for epoch in range(epochs):
                                                                         loss.item()))
         # Apply testing every epoch
         with torch.no_grad():
-            test_denoising(test_loader,batch_size_test,Net,mask_test,image_size,local_size)
+            test_denoising(test_loader,batch_size_test,Net,image_size,local_size)
             print('Saving parameters...')
             if prefix:
                 if pretrain:

@@ -104,7 +104,7 @@ for epoch in range(epochs):
 
     with torch.no_grad():
         # Apply testing every epoch
-        test_deblurring(test_loader, batch_size, Net, blurkernel_test, image_size)
+        test_deblurring(test_loader, batch_size, Net, image_size)
         print('Saving parameters...')
         if prefix:
             if pretrain:

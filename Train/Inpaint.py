@@ -39,7 +39,7 @@ pretrain            = eval(sys.argv[8])
 batch_size_test = 256
 learning_rate = 0.002
 data_path_train = '../../data/celebaselected/' # choose the path where your data is located
-data_path_test = '../../CelebaTest/' # choose the path where your data is located
+data_path_test = '../../data/CelebaTest/' # choose the path where your data is located
 pile_time = image_size // local_size
 lossList = []
 
@@ -115,7 +115,7 @@ for epoch in range(epochs):
 
     # Apply testing every epoch
     with torch.no_grad():
-        test_inpainting(test_loader,batch_size_test,Net,mask_test,image_size,local_size)
+        test_inpainting(test_loader,batch_size_test,Net,image_size,local_size)
         print('Saving parameters...')
         if prefix:
             if pretrain:
