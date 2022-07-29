@@ -19,7 +19,7 @@ setup_seed(17)
 
 #### Here are the settings to the training ###
 print('\nTrain Settings: \nepochs: {}, batchSize: {}; \
-\nimageSize: {}, localSize: {}; \nnetLayer: {}, chebNum: {}.\nprefix: {}, pretrain: {}.\n'.format(sys.argv[1],
+\nimageSize: {}, localSize: {}; \nnetLayer: {}, chebNum: {};\nprefix: {}, pretrain: {}.\n'.format(sys.argv[1],
                                                                                                 sys.argv[2],
                                                                                                 sys.argv[3],
                                                                                                 sys.argv[4],
@@ -35,34 +35,98 @@ net_layer           = int(sys.argv[5]) # should be no more than log_2(local_size
 cheb_num            = int(sys.argv[6])
 prefix              = eval(sys.argv[7])
 pretrain            = eval(sys.argv[8])
+datasetName         = sys.argv[9]
+
+if prefix:
+    p1 = 'prefix'
+else:
+    p1 = 'noprefix'
+if pretrain:
+    p2 = 'pretrain'
+else:
+    p2 = 'nopretrain'
 
 batch_size_test = 256
 learning_rate = 0.002
-data_path_train = '../../data/celebaselected/' # choose the path where your data is located
-data_path_test = '../../data/CelebaTest/' # choose the path where your data is located
 pile_time = image_size // local_size
 lossList = []
 
+if datasetName == 'Celeba':
+    data_path_train = '../../data/celebaselected/' # choose the path where your data is located
+    data_path_test = '../../data/CelebaTest/' # choose the path where your data is located
 
-train_loader = DataLoader(
-    torchvision.datasets.ImageFolder(data_path_train,
-                               transform=torchvision.transforms.Compose(
-                                   [torchvision.transforms.Grayscale(num_output_channels=1),
-                                    torchvision.transforms.ToTensor(),
-                                    torchvision.transforms.Resize((image_size,image_size)),
-                                    maskTransfrom(image_size)])),
-    batch_size=batch_size_train, shuffle=True)
+    train_loader = DataLoader(
+        torchvision.datasets.ImageFolder(data_path_train,
+                                transform=torchvision.transforms.Compose(
+                                    [torchvision.transforms.Grayscale(num_output_channels=1),
+                                        torchvision.transforms.ToTensor(),
+                                        torchvision.transforms.Resize((image_size,image_size)),
+                                        maskTransfrom(image_size)])),
+        batch_size=batch_size_train, shuffle=True)
 
-test_loader = DataLoader(
-    torchvision.datasets.ImageFolder(data_path_test,
-                               transform=torchvision.transforms.Compose(
-                                   [torchvision.transforms.ToTensor(),
-                                    torchvision.transforms.Resize((image_size,image_size)),
-                                    maskTransfrom(image_size)])),
-    batch_size=batch_size_test, shuffle=False)
+    test_loader = DataLoader(
+        torchvision.datasets.ImageFolder(data_path_test,
+                                transform=torchvision.transforms.Compose(
+                                    [torchvision.transforms.ToTensor(),
+                                        torchvision.transforms.Resize((image_size,image_size)),
+                                        maskTransfrom(image_size)])),
+        batch_size=batch_size_test, shuffle=False)
+
+    pthpath = '../../Pths/Inpaint/' + sys.argv[7] + '/' + sys.argv[8] + '/' + '{}_{}_{}_{}_Celeba_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num)
+    imgpath = '../../Images/Inpaint/' + sys.argv[7] + '/' + sys.argv[8] + '/' + '{}_{}_{}_{}_Celeba_square_inpainting.eps'.format(local_size,image_size,net_layer,cheb_num)
+
+elif datasetName == 'CIFAR10':
+    data_path_train = '../../data/'
+    data_path_test = '../../data/'
+    train_loader = DataLoader(
+        torchvision.datasets.CIFAR10(data_path_train,
+                                transform=torchvision.transforms.Compose(
+                                    [torchvision.transforms.Grayscale(num_output_channels=1),
+                                        torchvision.transforms.ToTensor(),
+                                        torchvision.transforms.Resize((image_size,image_size)),
+                                        maskTransfrom(image_size)])),
+        batch_size=batch_size_train, shuffle=True)
+
+    test_loader = DataLoader(
+        torchvision.datasets.CIFAR10(data_path_test,
+                                transform=torchvision.transforms.Compose(
+                                    [torchvision.transforms.ToTensor(),
+                                        torchvision.transforms.Resize((image_size,image_size)),
+                                        maskTransfrom(image_size)])),
+        batch_size=batch_size_test, shuffle=False)
+
+    pthpath = '../../Pths/Inpaint/' + p1 + '/' + p2 + '/' + '{}_{}_{}_{}_CIFAR_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num)
+    imgpath = '../../Images/Inpaint/' + p1 + '/' + p2 + '/' + '{}_{}_{}_{}_CIFAR_square_inpainting.eps'.format(local_size,image_size,net_layer,cheb_num)
+
+elif datasetName == 'STL10':
+    data_path_train = '../../data/'
+    data_path_test = '../../data/'
+    train_loader = DataLoader(
+        torchvision.datasets.STL10(data_path_train,
+                                transform=torchvision.transforms.Compose(
+                                    [torchvision.transforms.Grayscale(num_output_channels=1),
+                                        torchvision.transforms.ToTensor(),
+                                        torchvision.transforms.Resize((image_size,image_size)),
+                                        maskTransfrom(image_size)])),
+        batch_size=batch_size_train, shuffle=True)
+
+    test_loader = DataLoader(
+        torchvision.datasets.STL10(data_path_test,
+                                transform=torchvision.transforms.Compose(
+                                    [torchvision.transforms.ToTensor(),
+                                        torchvision.transforms.Resize((image_size,image_size)),
+                                        maskTransfrom(image_size)])),
+        batch_size=batch_size_test, shuffle=False)
+    
+    pthpath = '../../Pths/Inpaint/' + sys.argv[7] + '/' + sys.argv[8] + '/' + '{}_{}_{}_{}_STL_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num)
+    imgpath = '../../Images/Inpaint/' + sys.argv[7] + '/' + sys.argv[8] + '/' + '{}_{}_{}_{}_STL_square_inpainting.eps'.format(local_size,image_size,net_layer,cheb_num)
+
+print('Pth will be saved to: ' + pthpath)
+print('\n')
+print('Image will be saved to: ' + imgpath)
 
 
-print('Generating Net...')
+print('\nGenerating Net...')
 Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,prefix).cuda()
 if pretrain:
     Net.pretrain(200)
@@ -108,7 +172,7 @@ for epoch in range(epochs):
         loss.backward()
         optimizer.step()
         scheduler.step(loss)
-        print('false Inpaint: local size {}, image size {} Train Epoch: {}/{}, [{}/{} ({:.2f}%)]\tLoss: {:.6f}'.format(local_size,image_size,epoch+1,epochs,step * len(image),
+        print('prefix: ' + sys.argv[7] + ' pretrain: ' + sys.argv[8] + '. Inpaint: local size {}, image size {} Train Epoch: {}/{}, [{}/{} ({:.2f}%)]\tLoss: {:.6f}'.format(local_size,image_size,epoch+1,epochs,step * len(image),
                                                                         len(train_loader.dataset),
                                                                         100 * step / len(train_loader),
                                                                         loss.item()))
@@ -116,34 +180,9 @@ for epoch in range(epochs):
     # Apply testing every epoch
     with torch.no_grad():
         test_inpainting(test_loader,batch_size_test,Net,image_size,local_size)
-        print('Saving parameters...')
-        if prefix:
-            if pretrain:
-                torch.save(Net.state_dict(),
-                '../../Pths/Inpaint/prefix/pretrain/{}_{}_{}_{}_Celeba_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num))
-
-                LossPlot([i*50 for i in range(len(lossList))], lossList, range(epochs), 
-                '../../Images/Inpaint/prefix/pretrain/{}_{}_{}_{}_Celeba_square_inpainting.eps'.format(local_size,image_size,net_layer,cheb_num))
-            else:
-                torch.save(Net.state_dict(),
-                '../../Pths/Inpaint/prefix/nopretrain/{}_{}_{}_{}_Celeba_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num))
-
-                LossPlot([i*50 for i in range(len(lossList))], lossList, range(epochs), 
-                '../../Images/Inpaint/prefix/nopretrain/{}_{}_{}_{}_Celeba_square_inpainting.eps'.format(local_size,image_size,net_layer,cheb_num))
-        else:
-            if pretrain:
-                torch.save(Net.state_dict(),
-                '../../Pths/Inapint/noprefix/pretrain/{}_{}_{}_{}_Celeba_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num))
-
-                LossPlot([i*50 for i in range(len(lossList))], lossList, range(epochs), 
-                '../../Images/Inpaint/noprefix/pretrain/{}_{}_{}_{}_Celeba_square_inpainting.eps'.format(local_size,image_size,net_layer,cheb_num))
-            else:
-                torch.save(Net.state_dict(),
-                '../../Pths/Inpaint/noprefix/nopretrain/{}_{}_{}_{}_Celeba_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num))
-
-                LossPlot([i*50 for i in range(len(lossList))], lossList, range(epochs), 
-                '../../Images/Inpaint/noprefix/nopretrain/{}_{}_{}_{}_Celeba_square_inpainting.eps'.format(local_size,image_size,net_layer,cheb_num))
+        print('Saving parameters and image...')
+        torch.save(Net.state_dict(),pthpath)
+        LossPlot([i*50 for i in range(len(lossList))], lossList, epoch+1, imgpath)
         print('Done.')
-
 
 print('Training is Done.')

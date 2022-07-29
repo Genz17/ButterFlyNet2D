@@ -4,9 +4,10 @@ import numpy as np
 
 
 def LossPlot(Xiter, Yiter, epochNum, path):
-    fig, ax1 = plt.subplots()
+    fig, ax1 = plt.subplots(figsize=(20,6))
     ax1.set_ylabel('loss') 
-    ax1.set_xlabel('iter') 
+    ax1.set_xlabel('iter')
+    plt.yscale('log')
     ax1.plot(Xiter, Yiter)
     ax1.tick_params(axis ='x', labelcolor = 'tab:blue')
     ax2 = ax1.twiny() 

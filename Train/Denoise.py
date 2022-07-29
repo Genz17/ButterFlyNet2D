@@ -125,26 +125,26 @@ for epoch in range(epochs):
                     torch.save(Net.state_dict(),
                     '../../Pths/Denoise/prefix/pretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
 
-                    LossPlot([i*50 for i in range(len(lossList))], lossList, epochs,
+                    LossPlot([i*50 for i in range(len(lossList))], lossList, epoch+1,
                     '../../Images/Denoise/prefix/pretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
                 else:
                     torch.save(Net.state_dict(),
                     '../../Pths/Denoise/prefix/nopretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
 
-                    LossPlot([i*50 for i in range(len(lossList))], lossList, epochs,
+                    LossPlot([i*50 for i in range(len(lossList))], lossList, epoch+1,
                     '../../Images/Denoise/prefix/nopretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
             else:
                 if pretrain:
                     torch.save(Net.state_dict(),
                     '../../Pths/Denoise/noprefix/pretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
 
-                    LossPlot([i*50 for i in range(len(lossList))], lossList, epochs,
+                    LossPlot([i*50 for i in range(len(lossList))], lossList, epoch+1,
                     '../../Images/Denoise/noprefix/pretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
                 else:
                     torch.save(Net.state_dict(),
                     '../../Pths/Denoise/noprefix/nopretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
 
-                    LossPlot([i*50 for i in range(len(lossList))], lossList, epochs,
+                    LossPlot([i*50 for i in range(len(lossList))], lossList, epoch+1,
                     '../../Images/Denoise/noprefix/nopretrain/{}_{}_{}_{}_{}_{}_Celeba_denoising.pth'.format(local_size,image_size,net_layer,cheb_num,noise_mean,noise_std))
             print('Done.')
 print('Training is Done.')
