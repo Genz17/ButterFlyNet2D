@@ -72,8 +72,8 @@ if datasetName == 'Celeba':
                                         maskTransfrom(image_size)])),
         batch_size=batch_size_test, shuffle=False)
 
-    pthpath = '../../Pths/Inpaint/' + sys.argv[7] + '/' + sys.argv[8] + '/' + '{}_{}_{}_{}_Celeba_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num)
-    imgpath = '../../Images/Inpaint/' + sys.argv[7] + '/' + sys.argv[8] + '/' + '{}_{}_{}_{}_Celeba_square_inpainting.eps'.format(local_size,image_size,net_layer,cheb_num)
+    pthpath = '../../Pths/Inpaint/' + p1 + '/' + p2 + '/' + '{}_{}_{}_{}_Celeba_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num)
+    imgpath = '../../Images/Inpaint/' + p1 + '/' + p2 + '/' + '{}_{}_{}_{}_Celeba_square_inpainting.eps'.format(local_size,image_size,net_layer,cheb_num)
 
 elif datasetName == 'CIFAR10':
     data_path_train = '../../data/'
@@ -118,8 +118,8 @@ elif datasetName == 'STL10':
                                         maskTransfrom(image_size)])),
         batch_size=batch_size_test, shuffle=False)
     
-    pthpath = '../../Pths/Inpaint/' + sys.argv[7] + '/' + sys.argv[8] + '/' + '{}_{}_{}_{}_STL_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num)
-    imgpath = '../../Images/Inpaint/' + sys.argv[7] + '/' + sys.argv[8] + '/' + '{}_{}_{}_{}_STL_square_inpainting.eps'.format(local_size,image_size,net_layer,cheb_num)
+    pthpath = '../../Pths/Inpaint/' + p1 + '/' + p2 + '/' + '{}_{}_{}_{}_STL_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num)
+    imgpath = '../../Images/Inpaint/' + p1 + '/' + p2 + '/' + '{}_{}_{}_{}_STL_square_inpainting.eps'.format(local_size,image_size,net_layer,cheb_num)
 
 print('Pth will be saved to: ' + pthpath)
 print('\n')
