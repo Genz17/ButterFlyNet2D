@@ -65,7 +65,7 @@ if datasetName == 'Celeba':
                                         torchvision.transforms.Resize((image_size,image_size)),
                                         maskTransfrom(image_size),
                                         splitTransfrom(image_size, local_size, 1)])),
-        batch_size=batch_size_train, shuffle=False)
+        batch_size=batch_size_train, shuffle=True)
 
     test_loader = DataLoader(
         torchvision.datasets.ImageFolder(data_path_test,

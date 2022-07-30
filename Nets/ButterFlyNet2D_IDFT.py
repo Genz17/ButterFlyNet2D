@@ -107,7 +107,7 @@ class ButterFlyNet2D_IDFT(nn.Module):
         for channel in range(self.in_channel_num):
             out1[:, channel*4*4*(self.chebyshev_number**2):(channel+1)*4*4*(self.chebyshev_number**2)] = \
                 self.conv_dict[str((0, channel, 0, 0))](input_data[:, 4*channel:4*(channel+1)])
-        out_rcs = nn.ReLU(inplace=True)(out1)
+        out_rcs = torch.nn.functional.relu(out1)
 
         for lyr in range(1, self.layer_number):
             out = torch.zeros(input_data.shape[0],
@@ -134,7 +134,7 @@ class ButterFlyNet2D_IDFT(nn.Module):
                             out_mid[:, 4*(y_location*2+x_location)*(self.chebyshev_number**2):
                                                     4*(y_location*2+x_location+1)*(self.chebyshev_number**2)]
                     del out_mid
-            out_rcs = nn.ReLU(inplace=True)(out)
+            out_rcs = torch.nn.functional.relu(out)
 
         out_final = torch.zeros(input_data.shape[0],
                           self.in_channel_num*4*self.height*self.width,
@@ -167,7 +167,7 @@ class ButterFlyNet2D_IDFT(nn.Module):
                                   kx + 1)] = \
                         out_final_mid[:, 4*(ky * self.leftover_x + kx):4 * (ky * self.leftover_x + kx + 1)]
                 del out_final_mid
-        out_final = nn.ReLU(inplace=True)(out_final)
+        out_final = torch.nn.functional.relu(out_final)
         out_joint = self.joint(out_final)
         out_A = out_joint.view((input_data.shape[0], self.in_channel_num, self.height, self.width))/(self.height*self.width)
 
@@ -191,7 +191,7 @@ class ButterFlyNet2D_IDFT(nn.Module):
                 -input_data[:, channel, :, :].real
             data_split[:, 4 * channel + 3, :, :] = \
                 -input_data[:, channel, :, :].imag
-        data_split = nn.ReLU(inplace=True)(data_split)
+        data_split = torch.nn.functional.relu(data_split)
         return data_split
 
 
