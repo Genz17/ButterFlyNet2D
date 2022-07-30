@@ -22,7 +22,7 @@ def squareMask128(inputData):
 def squareMask256(inputData):
     # 4 dimension
     mat = torch.ones_like(inputData)
-    mat[:,:,87:167,87:167]  = 0
+    mat[:,87:167,87:167]  = 0
     return mat
 
 def lineMask256(inputData):
@@ -30,5 +30,5 @@ def lineMask256(inputData):
     for col in range(8):
         mat[:,(col*32)+14:(col*32)+17,:] = 0
     for row in range(8):
-        mat[:,:,(row*32)+14:(row*32)+17] = 0
+        mat[:,(row*32)+14:(row*32)+17] = 0
     return mat

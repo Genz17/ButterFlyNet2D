@@ -21,9 +21,9 @@ def initgen():
     torch.save(Net.state_dict(),path)
 
 if __name__ == "__main__":
-    imageSize   = sys.argv[1]
-    layer       = sys.argv[2]
-    chebNum     = sys.argv[3]
+    image_size  = int(sys.argv[1])
+    layer       = int(sys.argv[2])
+    chebNum     = int(sys.argv[3])
     prefix      = eval(sys.argv[4])
     pretrain    = eval(sys.argv[5])
     initgen()

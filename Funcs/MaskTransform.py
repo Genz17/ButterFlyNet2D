@@ -6,5 +6,5 @@ class maskTransfrom(object):
         self.imgShape = imgShape
 
     def __call__(self, img):
-
+        
         return (img,img*eval('squareMask'+str(self.imgShape))(img))

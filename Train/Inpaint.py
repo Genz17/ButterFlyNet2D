@@ -12,8 +12,10 @@ from torch.utils.data import DataLoader
 from ButterFlyNet_Identical import ButterFlyNet_Identical
 from inpaint_test_func import test_inpainting
 from MaskTransform import maskTransfrom
+from SplitTransform import splitTransfrom
 from LossDraw import LossPlot
 from SeedSetup import setup_seed
+import matplotlib.pyplot as plt
 
 setup_seed(17)
 
@@ -53,7 +55,7 @@ lossList = []
 
 if datasetName == 'Celeba':
     data_path_train = '../../data/celebaselected/' # choose the path where your data is located
-    data_path_test = '../../data/CelebaTest/' # choose the path where your data is located
+    data_path_test = '../../CelebaTest/' # choose the path where your data is located
 
     train_loader = DataLoader(
         torchvision.datasets.ImageFolder(data_path_train,
@@ -61,8 +63,9 @@ if datasetName == 'Celeba':
                                     [torchvision.transforms.Grayscale(num_output_channels=1),
                                         torchvision.transforms.ToTensor(),
                                         torchvision.transforms.Resize((image_size,image_size)),
-                                        maskTransfrom(image_size)])),
-        batch_size=batch_size_train, shuffle=True)
+                                        maskTransfrom(image_size),
+                                        splitTransfrom(image_size, local_size, 1)])),
+        batch_size=batch_size_train, shuffle=False)
 
     test_loader = DataLoader(
         torchvision.datasets.ImageFolder(data_path_test,
@@ -84,7 +87,8 @@ elif datasetName == 'CIFAR10':
                                     [torchvision.transforms.Grayscale(num_output_channels=1),
                                         torchvision.transforms.ToTensor(),
                                         torchvision.transforms.Resize((image_size,image_size)),
-                                        maskTransfrom(image_size)])),
+                                        maskTransfrom(image_size),
+                                        splitTransfrom(image_size, local_size, 1)])),
         batch_size=batch_size_train, shuffle=True)
 
     test_loader = DataLoader(
@@ -107,7 +111,8 @@ elif datasetName == 'STL10':
                                     [torchvision.transforms.Grayscale(num_output_channels=1),
                                         torchvision.transforms.ToTensor(),
                                         torchvision.transforms.Resize((image_size,image_size)),
-                                        maskTransfrom(image_size)])),
+                                        maskTransfrom(image_size),
+                                        splitTransfrom(image_size, local_size, 1)])),
         batch_size=batch_size_train, shuffle=True)
 
     test_loader = DataLoader(
@@ -120,6 +125,7 @@ elif datasetName == 'STL10':
     
     pthpath = '../../Pths/Inpaint/' + p1 + '/' + p2 + '/' + '{}_{}_{}_{}_STL_square_inpainting.pth'.format(local_size,image_size,net_layer,cheb_num)
     imgpath = '../../Images/Inpaint/' + p1 + '/' + p2 + '/' + '{}_{}_{}_{}_STL_square_inpainting.eps'.format(local_size,image_size,net_layer,cheb_num)
+
 
 print('Pth will be saved to: ' + pthpath)
 print('\n')
@@ -161,18 +167,8 @@ print('Training Begins.')
 for epoch in range(epochs):
     for step, (Totalimage, label) in enumerate(train_loader):
         with torch.no_grad():
-
-            pileImage = torch.zeros((batch_size_train * (pile_time ** 2), 1, local_size, local_size)).cuda()
-            pileImageMasked = torch.zeros((batch_size_train * (pile_time ** 2), 1, local_size, local_size)).cuda()
-            image = Totalimage[0].cuda()
-            maskedimage = Totalimage[1].cuda()
-            for ii in range(pile_time ** 2):
-                pileImage[ii * batch_size_train:(ii + 1) * batch_size_train, :, :, :] = image[:, :,
-                                                                          (ii // pile_time) * (local_size):(ii // pile_time) * (local_size) + local_size,
-                                                                          (ii % pile_time) * (local_size):(ii % pile_time) * (local_size) + local_size]
-                pileImageMasked[ii * batch_size_train:(ii + 1) * batch_size_train, :, :, :] = maskedimage[:, :,
-                                                                          (ii // pile_time) * (local_size):(ii // pile_time) * (local_size) + local_size,
-                                                                          (ii % pile_time) * (local_size):(ii % pile_time) * (local_size) + local_size]
+            pileImage       = Totalimage[0].cuda().view(-1,1,local_size,local_size)
+            pileImageMasked = Totalimage[1].cuda().view(-1,1,local_size,local_size)
         optimizer.zero_grad()
         output = Net(pileImageMasked)
         loss = torch.norm(output - pileImage) / torch.norm(pileImage)
@@ -181,7 +177,8 @@ for epoch in range(epochs):
         loss.backward()
         optimizer.step()
         scheduler.step(loss)
-        print('prefix: ' + sys.argv[7] + ' pretrain: ' + sys.argv[8] + '. Inpaint: local size {}, image size {} Train Epoch: {}/{}, [{}/{} ({:.2f}%)]\tLoss: {:.6f}'.format(local_size,image_size,epoch+1,epochs,step * len(image),
+        print('prefix: ' + sys.argv[7] + ' pretrain: ' + sys.argv[8] + '. Inpaint: local size {}, image size {} Train Epoch: {}/{}, [{}/{} ({:.2f}%)]\tLoss: {:.6f}'.format(
+                                                                        local_size,image_size,epoch+1,epochs,step * len(pileImage),
                                                                         len(train_loader.dataset),
                                                                         100 * step / len(train_loader),
                                                                         loss.item()))

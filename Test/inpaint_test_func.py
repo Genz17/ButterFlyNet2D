@@ -26,6 +26,7 @@ def test_inpainting(test_loader,batch_size,Net,image_size,local_size):
                 for ii in range(lap_time ** 2):
                     output_done[:, i:i + 1, (ii // lap_time) * local_size:((ii // lap_time) + 1) * local_size,
                     (ii % lap_time) * local_size:((ii % lap_time) + 1) * local_size] = done[ii * batch_size:(ii + 1) * batch_size, :, :, :]
+
             before = sum([-10 * np.log10((torch.norm(maskedimage[i:i+1,:,:,:] - image[i:i+1,:,:,:], 'fro').item())
                                          ** 2 / (3 * image_size * image_size)) for i in range(batch_size)]) / batch_size
             after = sum([-10 * np.log10((torch.norm(output_done[i:i+1,:,:,:] - image[i:i+1,:,:,:], 'fro').item())
