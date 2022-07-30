@@ -4,7 +4,7 @@ import numpy as np
 
 
 def LossPlot(Xiter, Yiter, epochNum, path):
-    fig, ax1 = plt.subplots(figsize=(20,6))
+    fig, ax1 = plt.subplots(figsize=(15,6))
     ax1.set_ylabel('loss') 
     ax1.set_xlabel('iter')
     plt.yscale('log')
