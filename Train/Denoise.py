@@ -63,11 +63,21 @@ test_loader = DataLoader(
                                     noiseTransfrom(noise_mean, noise_std)])),
     batch_size=batch_size_test, shuffle=False)
 
-print('Generating Net...')
-Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,prefix).cuda()
-if pretrain:
-    Net.pretrain(200)
-print('Done.')
+print('\nGenerating Net...')
+Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num).cuda()
+try:
+    path = '../../Pths/Base' + '/{}_{}.pth'.format(sys.argv[7],sys.argv[8])
+    Net.load_state_dict(torch.load(path))
+    print('Paras have been created. Loaded.')
+except Exception:
+    print('Need to initialize from the bottom.')
+    if prefix:
+        print('\nGenerating Net...')
+        Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,prefix).cuda()
+    if pretrain:
+        Net.pretrain(200)
+    print('Done.')
+
 optimizer = torch.optim.Adam(Net.parameters(), lr=learning_rate)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.95, patience=100, verbose=True,
                                                          threshold=0.00005, threshold_mode='rel', cooldown=3, min_lr=0, eps=1e-16)

@@ -27,5 +27,4 @@ Mainly contain training parts. Each file is for its corresponding task's trainin
 Mainly contain test parts. **TEST.py** is implemented for testing, while other programs are for corresponding task's testing process.
 
 ## Funcs
-
 Here stored some supportive functions which will be used in the building-up, training or testing process.

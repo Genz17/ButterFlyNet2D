@@ -127,10 +127,19 @@ print('Image will be saved to: ' + imgpath)
 
 
 print('\nGenerating Net...')
-Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,prefix).cuda()
-if pretrain:
-    Net.pretrain(200)
-print('Done.')
+Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num).cuda()
+try:
+    path = '../../Pths/Base' + '/{}_{}.pth'.format(sys.argv[7],sys.argv[8])
+    Net.load_state_dict(torch.load(path))
+    print('Paras have been created. Loaded.')
+except Exception:
+    print('Need to initialize from the bottom.')
+    if prefix:
+        print('\nGenerating Net...')
+        Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,prefix).cuda()
+    if pretrain:
+        Net.pretrain(200)
+    print('Done.')
 
 num = 0
 for para in Net.parameters():
