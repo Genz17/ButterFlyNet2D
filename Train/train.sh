@@ -5,4 +5,4 @@
 #SBATCH --output=inp.out
 
 source activate DL
-python -u Inpaint.py 40 50 64 64 6 2 True True Celeba
+python -u train.py Celeba Inpaint 48 48 64 64 True True False
