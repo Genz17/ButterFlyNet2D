@@ -1875,3 +1875,13 @@ Inpaint local size 64, image size 64. Process: [14160/30000 (47.20%)]	Loss: 0.06
 Inpaint local size 64, image size 128. Process: [43968/30000 (36.64%)]	Loss: 0.068367
 Inpaint local size 64, image size 64. Process: [14208/30000 (47.36%)]	Loss: 0.068382
 Inpaint local size 64, image size 64. Process: [14256/30000 (47.52%)]	Loss: 0.062800
+Inpaint local size 64, image size 128. Process: [44016/30000 (36.68%)]	Loss: 0.066235
+Inpaint local size 64, image size 64. Process: [14304/30000 (47.68%)]	Loss: 0.062606
+Inpaint local size 64, image size 128. Process: [44064/30000 (36.72%)]	Loss: 0.078234
+Inpaint local size 64, image size 64. Process: [14352/30000 (47.84%)]	Loss: 0.068818
+Inpaint local size 64, image size 128. Process: [44112/30000 (36.76%)]	Loss: 0.068432
+Inpaint local size 64, image size 64. Process: [14400/30000 (48.00%)]	Loss: 0.070099
+Inpaint local size 64, image size 128. Process: [44160/30000 (36.80%)]	Loss: 0.069972
+Inpaint local size 64, image size 64. Process: [14448/30000 (48.16%)]	Loss: 0.065062
+Inpaint local size 64, image size 64. Process: [14496/30000 (48.32%)]	Loss: 0.070852
+Inpaint local size 64, image size 128. Process: [44208/30000 (36.84%)]	Loss: 0.076895
