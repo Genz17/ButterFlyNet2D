@@ -13,8 +13,8 @@ def trainModel(task, train_loader, Net, optimizer, scheduler, lossList, local_si
         loss.backward()
         optimizer.step()
         scheduler.step(loss)
-        print(task + ' local size {}, image size {}. Train Epoch: {}/{}, [{}/{} ({:.2f}%)]\tLoss: {:.6f}'.format(
-                                                                        local_size,image_size,epoch+1,epochs,step * len(pileImage),
+        print(task + ' local size {}, image size {}. Process: [{}/{} ({:.2f}%)]\tLoss: {:.6f}'.format(
+                                                                        local_size,image_size,step * len(pileImage),
                                                                         len(train_loader.dataset),
                                                                         100 * step / len(train_loader),
                                                                         loss.item()))
