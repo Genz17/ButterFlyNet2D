@@ -1,4 +1,7 @@
-def Netinit(local_size,net_layer,cheb_num,Resume):
+import torch
+from ButterFlyNet_Identical import ButterFlyNet_Identical
+
+def Netinit(local_size,net_layer,cheb_num,Resume,prefix,pretrain):
     if Resume:
         print('Resume. Loading...')
         Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num).cuda()
@@ -20,7 +23,7 @@ def Netinit(local_size,net_layer,cheb_num,Resume):
         print('\nGenerating Net...')
         Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num).cuda()
         try:
-            path = '../../Pths/Base' + '/{}_{}.pth'.format(sys.argv[7],sys.argv[8])
+            path = '../../Pths/Base' + '/{}_{}.pth'.format(prefix, pretrain)
             Net.load_state_dict(torch.load(path))
             print('Paras have been created. Loaded.')
         except Exception:
@@ -31,7 +34,7 @@ def Netinit(local_size,net_layer,cheb_num,Resume):
             if pretrain:
                 Net.pretrain(200)
             print('Done.')
-        optimizer = torch.optim.Adam(Net.parameters(), lr=learning_rate)
+        optimizer = torch.optim.Adam(Net.parameters(), lr=0.002)
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.95, patience=100, verbose=True,
                                                                 threshold=0.00005, threshold_mode='rel', cooldown=3, min_lr=0, eps=1e-16)
         startEpoch = 0

@@ -1,11 +1,12 @@
 import torchvision
+from torch.utils.data import DataLoader
 from MaskTransform  import maskTransfrom
 from SplitTransform import splitTransfrom
 from NoiseTransform import noiseTransfrom
 from BlurTransform  import blurTransfrom
 
 
-def load_dataset(task, datasetName, image_size, local_size, p1, p2):
+def load_dataset(task, datasetName, batch_size_train, batch_size_test, image_size, local_size, p1, p2):
     if task == 'Inpaint':
         trainTransfrom = [torchvision.transforms.Grayscale(num_output_channels=1),
                                     torchvision.transforms.ToTensor(),
@@ -78,10 +79,4 @@ def load_dataset(task, datasetName, image_size, local_size, p1, p2):
             batch_size=batch_size_test, shuffle=False)
         
 
-    pthpath = '../../Pths/' + task + '/' + p1 + '/' + p2 + '/' + '{}_{}_{}_{}.pth'.format(local_size,image_size,net_layer,cheb_num)
-    imgpath = '../../Images/' + task + '/' + p1 + '/' + p2 + '/' + '{}_{}_{}_{}.eps'.format(local_size,image_size,net_layer,cheb_num)
-    print('Pth will be saved to: ' + pthpath)
-    print('\n')
-    print('Image will be saved to: ' + imgpath)
-
-    return train_loader, test_loader, pthpath, imgpath
+    return train_loader, test_loader

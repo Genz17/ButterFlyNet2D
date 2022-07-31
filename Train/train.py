@@ -4,13 +4,12 @@ sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Funcs')))
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Nets')))
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Test')))
 import torch
-from ButterFlyNet_Identical import ButterFlyNet_Identical
 from LossDraw               import LossPlot
 from SeedSetup              import setup_seed
 from Loader                 import load_dataset
 from Netinit                import Netinit
 from Trainer                import trainModel
-from TEST                   import test
+from Test                   import test
 
 setup_seed(17)
 
@@ -35,18 +34,22 @@ if pretrain:
 else:
     p2 = 'nopretrain'
 
-print('Task: {};\n \
-    dataset: {}.\n')
+print('Task: {};\ndataset: {}.\n'.format(task,datasetName))
 
 batch_size_test = 256
-learning_rate   = 0.002
 net_layer       = 6
 cheb_num        = 2
 pile_time = image_size // local_size
 lossList = []
 
-train_loader, test_loader, pthpath, imgpath = load_dataset(task, datasetName, image_size, local_size, p1, p2)
-Net, optimizer, scheduler, startEpoch       = Netinit(local_size, net_layer, cheb_num, Resume)
+pthpath = '../../Pths/' + task + '/' + p1 + '/' + p2 + '/' + '{}_{}_{}_{}.pth'.format(local_size,image_size,net_layer,cheb_num)
+imgpath = '../../Images/' + task + '/' + p1 + '/' + p2 + '/' + '{}_{}_{}_{}.eps'.format(local_size,image_size,net_layer,cheb_num)
+print('Pth will be saved to: ' + pthpath)
+print('\n')
+print('Image will be saved to: ' + imgpath)
+
+train_loader, test_loader                   = load_dataset(task, datasetName, batch_size_train, batch_size_test, image_size, local_size, p1, p2)
+Net, optimizer, scheduler, startEpoch       = Netinit(local_size, net_layer, cheb_num, Resume, prefix, pretrain)
 
 ##############################################
 
@@ -58,7 +61,7 @@ print('Done.')
 
 print('Training Begins.')
 for epoch in range(startEpoch, epoches):
-    trainModel(task, train_loader, Net, optimizer, scheduler, lossList)
+    trainModel(task, train_loader, Net, optimizer, scheduler, lossList, local_size, image_size)
     # Apply testing every epoch
     with torch.no_grad():
         test(task, test_loader, batch_size_test, Net, image_size, local_size)
