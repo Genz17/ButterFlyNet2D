@@ -42,8 +42,8 @@ if testType == 'layer':
 
     fig = plt.figure()
     plt.yscale('log')
-    fig.ylabel('rel err in log') 
-    fig.xlabel('layerNum')
+    plt.ylabel('rel err in log') 
+    plt.xlabel('layerNum')
     plt.plot(range(1, int(math.log2(inputSize))+1), lossList1)
     plt.plot(range(1, int(math.log2(inputSize))+1), lossList2)
     plt.plot(range(1, int(math.log2(inputSize))+1), lossListinf)
