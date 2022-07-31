@@ -17,7 +17,7 @@ def initgen():
     if pretrain:
         print('PreTrain...')
         Net.pretrain(200)
-    path = '../../Pths/Base' + '/{}_{}.pth'.format(sys.argv[4],sys.argv[5])
+    path = '../../Pths/Base' + '/{}_{}_{}_{}_{}.pth'.format(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4],sys.argv[5])
     torch.save(Net.state_dict(),path)
 
 if __name__ == "__main__":

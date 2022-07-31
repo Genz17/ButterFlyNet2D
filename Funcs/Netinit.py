@@ -23,7 +23,7 @@ def Netinit(local_size,net_layer,cheb_num,Resume,prefix,pretrain):
         print('\nGenerating Net...')
         Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num).cuda()
         try:
-            path = '../../Pths/Base' + '/{}_{}.pth'.format(prefix, pretrain)
+            path = '../../Pths/Base' + '/{}_{}_{}_{}_{}.pth'.format(local_size,net_layer,cheb_num,prefix,pretrain)
             Net.load_state_dict(torch.load(path))
             print('Paras have been created. Loaded.')
         except Exception:
