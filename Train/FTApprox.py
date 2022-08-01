@@ -42,7 +42,7 @@ if testType == 'layer':
 
     fig = plt.figure()
     plt.yscale('log')
-    plt.ylabel('rel err in log') 
+    plt.ylabel('rel err in log')
     plt.xlabel('layerNum')
     plt.plot(range(1, int(math.log2(inputSize))+1), lossList1)
     plt.plot(range(1, int(math.log2(inputSize))+1), lossList2)
@@ -52,7 +52,6 @@ if testType == 'layer':
     plt.savefig('./layertest_{}.eps'.format(inputSize))
     plt.show()
     plt.show()
-    
 
 if testType == 'cheb':
     lossList1 = []
@@ -75,7 +74,7 @@ if testType == 'cheb':
 
     fig = plt.figure()
     plt.yscale('log')
-    plt.ylabel('rel err in log') 
+    plt.ylabel('rel err in log')
     plt.xlabel('chebNum')
     plt.plot(range(1, 7), lossList1)
     plt.plot(range(1, 7), lossList2)

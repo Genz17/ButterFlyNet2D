@@ -21,7 +21,14 @@ This is a neural network that put all the parameters in Butterfly Algorithm into
   Assembles the ButterFlyNet2D and ButterFlyNet2D_IDFT into one whole neural network.
 
 ## Train
-Mainly contain training parts. Run train.py in such form:
+
+Mainly contain training parts. Before Run ``` train.py ```, we highly recommend you to run ``` BaseInitGenerate.py ``` in 
+```
+python BaseInitGenerate.py <input size> <layer number> <cheb num> <prefix> <pretrain>    
+```
+This will save you some time before the training goes.
+
+Run ``` train.py ``` in such form:
 
 ```
 python -u train.py <dataset name> <task name> <epoches> <batch size> <input size> <net input size> <prefix> <pretrain> <resume>
