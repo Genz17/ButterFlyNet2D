@@ -22,7 +22,7 @@ This is a neural network that put all the parameters in Butterfly Algorithm into
 
 ## Train
 
-Mainly contain training parts. Before Run ``` train.py ```, we highly recommend you to run ``` BaseInitGenerate.py ``` in 
+Mainly contain training parts. Before Run ``` train.py ```, we highly recommend you to run ``` BaseInitGenerate.py ``` in Funcs folder like this:
 ```
 python BaseInitGenerate.py <input size> <layer number> <cheb num> <prefix> <pretrain>    
 ```
@@ -40,7 +40,7 @@ python -u train.py Celeba Inpaint 12 12 128 64 True True False
 ```
 
 ## Test
-Mainly contain test parts. **TEST.py** is implemented for testing, while other programs are for corresponding task's testing process.
+Mainly contain test parts. ```Test.py``` is implemented for testing, while other programs are for corresponding task's testing process.
 
 ## Funcs
 Here stored some supportive functions which will be used in the building-up, training or testing process.
