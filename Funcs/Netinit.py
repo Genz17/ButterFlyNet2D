@@ -6,7 +6,7 @@ def Netinit(local_size,net_layer,cheb_num,Resume,prefix,pretrain):
         print('Resume. Loading...')
         Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num).cuda()
         optimizer = torch.optim.Adam(Net.parameters(), lr=learning_rate)
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.95, patience=100, verbose=True,
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.98, patience=100, verbose=True,
                                                                 threshold=0.00005, threshold_mode='rel', cooldown=3, min_lr=0, eps=1e-16)
 
         checkPoint = torch.load(pthpath)
@@ -35,7 +35,7 @@ def Netinit(local_size,net_layer,cheb_num,Resume,prefix,pretrain):
                 Net.pretrain(200)
             print('Done.')
         optimizer = torch.optim.Adam(Net.parameters(), lr=0.002)
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.95, patience=100, verbose=True,
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.98, patience=100, verbose=True,
                                                                 threshold=0.00005, threshold_mode='rel', cooldown=3, min_lr=0, eps=1e-16)
         startEpoch = 0
 
