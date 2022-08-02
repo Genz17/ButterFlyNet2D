@@ -1,7 +1,7 @@
 import torch
 from ButterFlyNet_Identical import ButterFlyNet_Identical
 
-def Netinit(local_size,net_layer,cheb_num,Resume,prefix,pretrain):
+def Netinit(local_size,net_layer,cheb_num,Resume,prefix,pretrain,pthpath):
     if Resume:
         print('Resume. Loading...')
         Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num).cuda()
