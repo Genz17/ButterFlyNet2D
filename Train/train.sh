@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH -t 3-0
-#SBATCH --gres=gpu:tesla_t4:1
+#SBATCH --gres=gpu:nvidia_a30:1
 #SBATCH -J inp128
 #SBATCH --output=inp.out
 
