@@ -25,7 +25,7 @@ def load_dataset(task, datasetName, batch_size_train, batch_size_test, image_siz
                                     splitTransfrom(image_size, local_size, 1)]
         testTransfrom = [torchvision.transforms.ToTensor(),
                                     torchvision.transforms.Resize((image_size,image_size)),
-                                    blurTransfrom(0, std, kerNelSize, 3)]
+                                    blurTransfrom(0, 5, 5, 3)]
 
     if task == 'Denoise':
         trainTransfrom = [torchvision.transforms.Grayscale(num_output_channels=1),
@@ -56,12 +56,12 @@ def load_dataset(task, datasetName, batch_size_train, batch_size_test, image_siz
         data_path_train = '../../data/'
         data_path_test = '../../data/'
         train_loader = DataLoader(
-            torchvision.datasets.CIFAR10(data_path_train,
+            torchvision.datasets.CIFAR10(data_path_train,train=True,
                                     transform=torchvision.transforms.Compose(trainTransfrom)),
             batch_size=batch_size_train, shuffle=True)
 
         test_loader = DataLoader(
-            torchvision.datasets.CIFAR10(data_path_test,
+            torchvision.datasets.CIFAR10(data_path_test,train=False,
                                     transform=torchvision.transforms.Compose(testTransfrom)),
             batch_size=batch_size_test, shuffle=False)
 
@@ -69,12 +69,12 @@ def load_dataset(task, datasetName, batch_size_train, batch_size_test, image_siz
         data_path_train = '../../data/'
         data_path_test = '../../data/'
         train_loader = DataLoader(
-            torchvision.datasets.STL10(data_path_train,
+            torchvision.datasets.STL10(data_path_train,split='train',
                                     transform=torchvision.transforms.Compose(trainTransfrom)),
             batch_size=batch_size_train, shuffle=True)
 
         test_loader = DataLoader(
-            torchvision.datasets.STL10(data_path_test,
+            torchvision.datasets.STL10(data_path_test,split='test',
                                     transform=torchvision.transforms.Compose(testTransfrom)),
             batch_size=batch_size_test, shuffle=False)
         
