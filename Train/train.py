@@ -57,7 +57,7 @@ Net, optimizer, scheduler, startEpoch,lossList  = Netinit(local_size, net_layer,
 print('Test before training...')
 # Apply one test before training
 with torch.no_grad():
-    test(task, test_loader, batch_size_test, Net, image_size, local_size)
+    test(test_loader, batch_size_test, Net, image_size, local_size)
 print('Done.')
 
 print('Training Begins.')

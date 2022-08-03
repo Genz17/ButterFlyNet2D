@@ -1,7 +1,6 @@
 import sys
 import os
 import torch
-import matplotlib.pyplot as plt
 import numpy as np
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Funcs')))
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Nets')))
