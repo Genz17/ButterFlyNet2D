@@ -4,6 +4,7 @@ sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Funcs')))
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Nets')))
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Test')))
 import torch
+import math
 from LossDraw               import LossPlot
 from SeedSetup              import setup_seed
 from Loader                 import load_dataset
@@ -37,7 +38,7 @@ else:
 print('Task: {};\ndataset: {}.\n'.format(task,datasetName))
 
 batch_size_test = 256
-net_layer       = 6
+net_layer       = int(math.log2(local_size))
 cheb_num        = 2
 pile_time = image_size // local_size
 lossList = []
