@@ -10,6 +10,17 @@ python BaseInitGenerate.py <input size> <layer number> <cheb num> <prefix> <pret
 ```
 This will do the initialization and save the parameters which can be reused in training.
 
+We recommend you to run 
+```
+python BaseInitGenerate.py 64 6 2 True True
+```
+```
+python BaseInitGenerate.py 32 5 2 True True
+```
+```
+python BaseInitGenerate.py 16 4 2 True True
+```
+at first. These could be used in training.
 ## Nets
 
 Core neural networks are stored here.
