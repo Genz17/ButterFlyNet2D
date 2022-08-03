@@ -10,7 +10,7 @@ def Netinit(local_size,net_layer,cheb_num,Resume,prefix,pretrain,pthpath):
                                                                 threshold=0.00005, threshold_mode='rel', cooldown=3, min_lr=0, eps=1e-16)
 
         checkPoint = torch.load(pthpath)
-
+        lossList = checkPoint['lossList']
         Net.load_state_dict(checkPoint['Net'])
         optimizer.load_state_dict(checkPoint['optimizer'])
         scheduler.load_state_dict(checkPoint['scheduler'])
@@ -38,10 +38,11 @@ def Netinit(local_size,net_layer,cheb_num,Resume,prefix,pretrain,pthpath):
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.98, patience=100, verbose=True,
                                                                 threshold=0.00005, threshold_mode='rel', cooldown=3, min_lr=0, eps=1e-16)
         startEpoch = 0
+        lossList = []
 
 
     num = 0
     for para in Net.parameters():
         num+=torch.prod(torch.tensor(para.shape))
     print('The number of paras in the network is {}.'.format(num))
-    return Net,optimizer,scheduler,startEpoch
+    return Net,optimizer,scheduler,startEpoch,lossList

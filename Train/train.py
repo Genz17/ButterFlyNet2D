@@ -48,8 +48,8 @@ print('Pth will be saved to: ' + pthpath)
 print('\n')
 print('Image will be saved to: ' + imgpath)
 
-train_loader, test_loader                   = load_dataset(task, datasetName, batch_size_train, batch_size_test, image_size, local_size, p1, p2)
-Net, optimizer, scheduler, startEpoch       = Netinit(local_size, net_layer, cheb_num, Resume, prefix, pretrain, pthpath)
+train_loader, test_loader                       = load_dataset(task, datasetName, batch_size_train, batch_size_test, image_size, local_size, p1, p2)
+Net, optimizer, scheduler, startEpoch,lossList  = Netinit(local_size, net_layer, cheb_num, Resume, prefix, pretrain, pthpath)
 
 ##############################################
 
@@ -71,7 +71,8 @@ for epoch in range(startEpoch, epoches):
             'Net':Net.state_dict(),
             'optimizer':optimizer.state_dict(),
             'epoch':epoch+1,
-            'scheduler':scheduler.state_dict()
+            'scheduler':scheduler.state_dict(),
+            'lossList':lossList
         }
         torch.save(checkPoint,pthpath)
         LossPlot([i*50 for i in range(len(lossList))], lossList, epoch+1, imgpath)

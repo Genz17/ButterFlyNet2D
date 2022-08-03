@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 from pylab import xticks
-import numpy as np
 
 
 def LossPlot(Xiter, Yiter, epochNum, path):
+    plt.rcParams.update({'font.size':20})
     fig, ax1 = plt.subplots(figsize=(15,6))
     ax1.set_ylabel('loss') 
     ax1.set_xlabel('iter')
