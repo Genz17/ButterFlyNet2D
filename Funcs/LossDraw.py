@@ -12,5 +12,5 @@ def LossPlot(Xiter, Yiter, epochNum, path):
     ax1.tick_params(axis ='x', labelcolor = 'tab:blue')
     ax2 = ax1.twiny()
     ax2.set_xlabel('epoch', color = 'tab:red')
-    xticks(range(0,epochNum+epochNum//12,epochNum//12))
+    xticks(range(0,epochNum+epochNum//12,max(epochNum//12,1)))
     plt.savefig(path)
