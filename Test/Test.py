@@ -65,9 +65,11 @@ if __name__ == '__main__':
     datasetName = sys.argv[2]
     image_size  = int(sys.argv[3])
     local_size  = int(sys.argv[4])
-    prefix      = eval(sys.argv[5])
-    pretrain    = eval(sys.argv[6])
-    pic         = eval(sys.argv[7])
+    net_layer   = int(sys.argv[5])
+    cheb_num    = int(sys.argv[6])
+    prefix      = eval(sys.argv[7])
+    pretrain    = eval(sys.argv[8])
+    pic         = eval(sys.argv[9])
     if prefix:
         p1 = 'prefix'
     else:
@@ -78,8 +80,6 @@ if __name__ == '__main__':
         p2 = 'nopretrain'
 
     batch_size_test = 256
-    net_layer       = int(math.log2(local_size))
-    cheb_num        = 2
     pthpath = '../../Pths/' + task + '/' + p1 + '/' + p2 + '/' + datasetName + '_{}_{}_{}_{}.pth'.format(local_size,image_size,net_layer,cheb_num)
     imgpath_origin = '../../Images/pics/' + task + '/' + p1 + '/' + p2 + '/' + datasetName + '_{}_{}_{}_{}_or.eps'.format(local_size,image_size,net_layer,cheb_num)
     imgpath_operated = '../../Images/pics/' + task + '/' + p1 + '/' + p2 + '/' + datasetName + '_{}_{}_{}_{}_op.eps'.format(local_size,image_size,net_layer,cheb_num)

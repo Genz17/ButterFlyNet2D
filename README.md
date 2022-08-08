@@ -45,7 +45,7 @@ This is a neural network that put all the parameters in Butterfly Algorithm into
 ## Test
 Mainly contain test parts. ```Test.py``` is implemented for testing, while other programs are for corresponding task's testing process. Test will be done during the training process. If you want to execute ```Test.py ``` only, run in this form:
 ```
-python <task name> <dataset name> <image size> <local size> <prefix> <pretrain> <pic>
+python <task name> <dataset name> <image size> <local size> <net layer> <cheb num> <prefix> <pretrain> <pic>
 ```
 Here the option ```<pic>``` is for whether you want to save images.
 
