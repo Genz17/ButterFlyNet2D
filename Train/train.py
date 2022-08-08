@@ -63,10 +63,10 @@ print('Done.')
 print('Training Begins.')
 for epoch in range(startEpoch, epoches):
     print('Now at epoch [{}/{}].'.format(epoch+1,epoches))
-    trainModel(train_loader, epoch, epoches, Net, optimizer, scheduler, lossList, local_size, image_size)
+    trainModel(task,train_loader, epoch, epoches, Net, optimizer, scheduler, lossList, local_size, image_size)
     # Apply testing every epoch
     with torch.no_grad():
-        test(task, test_loader, batch_size_test, Net, image_size, local_size)
+        test(test_loader, batch_size_test, Net, image_size, local_size)
         print('Saving parameters and image...')
         checkPoint = {
             'Net':Net.state_dict(),
