@@ -47,7 +47,7 @@ Mainly contain test parts. ```Test.py``` is implemented for testing, while other
 ```
 python <task name> <dataset name> <image size> <local size> <prefix> <pretrain> <pic>
 ```
-Here the option <pic> is for whether you want to save images.
+Here the option ```<pic>``` is for whether you want to save images.
 
 ## Train
 
