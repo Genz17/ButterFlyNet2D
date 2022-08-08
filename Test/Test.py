@@ -39,25 +39,30 @@ def test(test_loader,batch_size,Net,image_size,local_size,pic=False):
                                             ** 2 / (3 * image_size * image_size)) for i in range(batch_size)]) / batch_size
             print('Before PSNR: {}, \t After PSNR: {}'.format(before, after))
 
-            if pic:
-                fig = plt.figure()
-                plt.imshow(torch.permute(image[0].cpu(),(1,2,0)))
-                plt.savefig(imgpath_origin,bbox_inches='tight',pad_inches=0)
-                fig = plt.figure()
-                plt.imshow(torch.permute(operatedimage[0].cpu(),(1,2,0)))
-                plt.savefig(imgpath_operated,bbox_inches='tight',pad_inches=0)
-                fig = plt.figure()
-                plt.imshow(torch.permute(output_done[0].cpu(),(1,2,0)))
-                plt.savefig(imgpath_recover,bbox_inches='tight',pad_inches=0)
-                break
 
         except Exception:
             pass
 
+        if pic:
+            fig = plt.figure()
+            plt.axis('off')
+            plt.imshow(torch.permute(image[0].cpu(),(1,2,0)))
+            plt.savefig(imgpath_origin,bbox_inches='tight',pad_inches=0)
+
+            fig = plt.figure()
+            plt.axis('off')
+            plt.imshow(torch.permute(operatedimage[0].cpu(),(1,2,0)))
+            plt.savefig(imgpath_operated,bbox_inches='tight',pad_inches=0)
+
+            fig = plt.figure()
+            plt.axis('off')
+            plt.imshow(torch.permute(output_done[0].cpu(),(1,2,0)))
+            plt.savefig(imgpath_recover,bbox_inches='tight',pad_inches=0)
+            break
 
 if __name__ == '__main__':
     task        = sys.argv[1]
-    datasetName = int(sys.argv[2])
+    datasetName = sys.argv[2]
     image_size  = int(sys.argv[3])
     local_size  = int(sys.argv[4])
     prefix      = eval(sys.argv[5])
