@@ -22,9 +22,11 @@ epoches             = int(sys.argv[3])
 batch_size_train    = int(sys.argv[4])
 image_size          = int(sys.argv[5]) # the image size
 local_size          = int(sys.argv[6]) # size the network deals
-prefix              = eval(sys.argv[7])
-pretrain            = eval(sys.argv[8])
-Resume              = eval(sys.argv[9])
+net_layer           = int(sys.argv[7])
+cheb_num            = int(sys.argv[8])
+prefix              = eval(sys.argv[9])
+pretrain            = eval(sys.argv[10])
+Resume              = eval(sys.argv[11])
 
 if prefix:
     p1 = 'prefix'
@@ -38,8 +40,6 @@ else:
 print('Task: {};\ndataset: {}.\n'.format(task,datasetName))
 
 batch_size_test = 256
-net_layer       = int(math.log2(local_size))
-cheb_num        = 2
 pile_time = image_size // local_size
 lossList = []
 

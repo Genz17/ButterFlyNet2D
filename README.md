@@ -56,12 +56,12 @@ Mainly contain training parts.
 Run ``` train.py ``` in such form:
 
 ```
-python -u train.py <dataset name> <task name> <epoches> <batch size> <input size> <net input size> <prefix> <pretrain> <resume>
+python -u train.py <dataset name> <task name> <epoches> <batch size> <input size> <net input size> <net layer> <cheb num> <prefix> <pretrain> <resume>
 ```
 
 For example:
 ```
-python -u train.py Celeba Inpaint 12 12 128 64 True True False
+python -u train.py Celeba Inpaint 12 12 128 64 5 2 True True False
 ```
 
 
