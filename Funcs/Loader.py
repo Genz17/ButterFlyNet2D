@@ -21,11 +21,11 @@ def load_dataset(task, datasetName, batch_size_train, batch_size_test, image_siz
         trainTransfrom = [torchvision.transforms.Grayscale(num_output_channels=1),
                                     torchvision.transforms.ToTensor(),
                                     torchvision.transforms.Resize((image_size,image_size)),
-                                    blurTransfrom(0, 5, 5, 1),
+                                    blurTransfrom(0, 2.5, 5, 1),
                                     splitTransfrom(image_size, local_size, 1)]
         testTransfrom = [torchvision.transforms.ToTensor(),
                                     torchvision.transforms.Resize((image_size,image_size)),
-                                    blurTransfrom(0, 5, 5, 3)]
+                                    blurTransfrom(0, 2.5, 5, 3)]
 
     if task == 'Denoise':
         trainTransfrom = [torchvision.transforms.Grayscale(num_output_channels=1),
