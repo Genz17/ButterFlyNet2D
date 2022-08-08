@@ -42,13 +42,13 @@ def test(test_loader,batch_size,Net,image_size,local_size,pic=False):
             if pic:
                 fig = plt.figure()
                 plt.imshow(torch.permute(image[0].cpu(),(1,2,0)))
-                plt.savefig(imgpath_origin)
+                plt.savefig(imgpath_origin,bbox_inches='tight',pad_inches=0)
                 fig = plt.figure()
                 plt.imshow(torch.permute(operatedimage[0].cpu(),(1,2,0)))
-                plt.savefig(imgpath_operated)
+                plt.savefig(imgpath_operated,bbox_inches='tight',pad_inches=0)
                 fig = plt.figure()
                 plt.imshow(torch.permute(output_done[0].cpu(),(1,2,0)))
-                plt.savefig(imgpath_recover)
+                plt.savefig(imgpath_recover,bbox_inches='tight',pad_inches=0)
                 break
 
         except Exception:
