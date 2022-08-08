@@ -37,7 +37,7 @@ if pretrain:
 else:
     p2 = 'nopretrain'
 
-print('Task: {};\ndataset: {}.\n'.format(task,datasetName))
+print('Task: {};\ndataset: {}.'.format(task,datasetName))
 
 batch_size_test = 256
 pile_time = image_size // local_size

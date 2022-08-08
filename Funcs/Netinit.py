@@ -18,6 +18,8 @@ def Netinit(local_size,net_layer,cheb_num,Resume,prefix,pretrain,pthpath):
         print('Done.\n')
 
         print('Starts from epoch {}.'.format(startEpoch))
+        for group in optimizer.param_groups:
+            print('Learning Rate: {}.'.format(group['lr']))
 
     else:
         print('\nGenerating Net...')
