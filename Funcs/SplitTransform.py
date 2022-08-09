@@ -1,6 +1,6 @@
 import torch
 
-class splitTransfrom(object):
+class splitTransform(object):
     def __init__(self, imgSize, localSize, colorChannel):
         self.imgSize        = imgSize
         self.localSize      = localSize

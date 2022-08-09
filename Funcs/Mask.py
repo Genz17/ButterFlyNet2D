@@ -1,5 +1,4 @@
 import torch
-import random
 
 def squareMask32(inputData, colorChannel=3):
     # 4 dimension
@@ -54,5 +53,5 @@ def lineMask256(inputData):
     for col in range(8):
         mat[:,(col*32)+14:(col*32)+17,:] = 0
     for row in range(8):
-        mat[:,:(row*32)+14:(row*32)+17] = 0
+        mat[:,:,(row*32)+14:(row*32)+17] = 0
     return mat

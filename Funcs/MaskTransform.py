@@ -1,7 +1,7 @@
 import torch
 from Mask import *
 
-class maskTransfrom(object):
+class maskTransform(object):
     def __init__(self, imgShape,TP):
         self.imgShape   = imgShape
         self.TP         = TP

@@ -1,6 +1,6 @@
 import torch
 
-class noiseTransfrom(object):
+class noiseTransform(object):
     def __init__(self, mean, std):
         self.mean   = mean
         self.std    = std

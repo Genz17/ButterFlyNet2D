@@ -1,7 +1,7 @@
 import torch
 from Gaussian_Func import gauss
 
-class blurTransfrom(object):
+class blurTransform(object):
     def __init__(self, mean, std, kernelSize, colorChannel):
         self.blurkernel = torch.tensor(gauss(mean,mean,std,(kernelSize,kernelSize))).view(1,kernelSize,kernelSize).repeat(colorChannel,1,1)
 
