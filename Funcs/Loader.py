@@ -1,6 +1,7 @@
 import torchvision
 from torch.utils.data import DataLoader
 from MaskTransform  import maskTransfrom
+from waterMaskTransfrom import watermaskTransfrom
 from SplitTransform import splitTransfrom
 from NoiseTransform import noiseTransfrom
 from BlurTransform  import blurTransfrom
@@ -17,7 +18,7 @@ def load_dataset(task, datasetName, batch_size_train, batch_size_test, image_siz
                                     torchvision.transforms.Resize((image_size,image_size)),
                                     maskTransfrom(image_size,'square')]
 
-    if task == 'Inpaint':
+    if task == 'Linewatermark':
         trainTransfrom = [torchvision.transforms.Grayscale(num_output_channels=1),
                                     torchvision.transforms.ToTensor(),
                                     torchvision.transforms.Resize((image_size,image_size)),
@@ -26,6 +27,16 @@ def load_dataset(task, datasetName, batch_size_train, batch_size_test, image_siz
         testTransfrom = [torchvision.transforms.ToTensor(),
                                     torchvision.transforms.Resize((image_size,image_size)),
                                     maskTransfrom(image_size,'line')]
+
+    if task == 'BFwatermark':
+        trainTransfrom = [torchvision.transforms.ToTensor(),
+                                    torchvision.transforms.Grayscale(num_output_channels=1),
+                                    torchvision.transforms.Resize((image_size,image_size)),
+                                    watermaskTransfrom(image_size),
+                                    splitTransfrom(image_size, local_size, 1)]
+        testTransfrom = [torchvision.transforms.ToTensor(),
+                                    torchvision.transforms.Resize((image_size,image_size)),
+                                    watermaskTransfrom(image_size)]
 
     if task == 'Deblur':
         trainTransfrom = [torchvision.transforms.Grayscale(num_output_channels=1),
