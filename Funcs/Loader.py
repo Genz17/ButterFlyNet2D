@@ -11,11 +11,21 @@ def load_dataset(task, datasetName, batch_size_train, batch_size_test, image_siz
         trainTransfrom = [torchvision.transforms.Grayscale(num_output_channels=1),
                                     torchvision.transforms.ToTensor(),
                                     torchvision.transforms.Resize((image_size,image_size)),
-                                    maskTransfrom(image_size),
+                                    maskTransfrom(image_size,'square'),
                                     splitTransfrom(image_size, local_size, 1)]
         testTransfrom = [torchvision.transforms.ToTensor(),
                                     torchvision.transforms.Resize((image_size,image_size)),
-                                    maskTransfrom(image_size)]
+                                    maskTransfrom(image_size,'square')]
+
+    if task == 'Inpaint':
+        trainTransfrom = [torchvision.transforms.Grayscale(num_output_channels=1),
+                                    torchvision.transforms.ToTensor(),
+                                    torchvision.transforms.Resize((image_size,image_size)),
+                                    maskTransfrom(image_size,'line'),
+                                    splitTransfrom(image_size, local_size, 1)]
+        testTransfrom = [torchvision.transforms.ToTensor(),
+                                    torchvision.transforms.Resize((image_size,image_size)),
+                                    maskTransfrom(image_size,'line')]
 
     if task == 'Deblur':
         trainTransfrom = [torchvision.transforms.Grayscale(num_output_channels=1),
