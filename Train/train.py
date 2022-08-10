@@ -3,6 +3,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Funcs')))
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Nets')))
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Test')))
+import json
 import torch
 import math
 from LossDraw               import LossPlot
@@ -15,23 +16,20 @@ from Test                   import test
 setup_seed(17)
 
 #### Here are the settings to the training ###
+settings            = open('settings.json')
+datasetName         = settings['datasetName']
+task                = settings['task']
+epoches             = settings['epoches']
+batch_size_train    = settings['batch_size_train']
+image_size          = settings['image_size']
+local_size          = settings['local_size']
+net_layer           = settings['net_layer']
+cheb_num            = settings['cheb_num']
+initMethod          = settings['initMethod']
+pretrain            = settings['pretrain']
+Resume              = settings['resume']
 
-datasetName         = sys.argv[1]
-task                = sys.argv[2]
-epoches             = int(sys.argv[3])
-batch_size_train    = int(sys.argv[4])
-image_size          = int(sys.argv[5]) # the image size
-local_size          = int(sys.argv[6]) # size the network deals
-net_layer           = int(sys.argv[7])
-cheb_num            = int(sys.argv[8])
-prefix              = eval(sys.argv[9])
-pretrain            = eval(sys.argv[10])
-Resume              = eval(sys.argv[11])
-
-if prefix:
-    p1 = 'prefix'
-else:
-    p1 = 'noprefix'
+p1 = initMethod
 if pretrain:
     p2 = 'pretrain'
 else:

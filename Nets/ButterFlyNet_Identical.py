@@ -5,11 +5,11 @@ from ButterFlyNet2D_IDFT import ButterFlyNet2D_IDFT
 
 class ButterFlyNet_Identical(nn.Module):
     # Testing: suppose input to be 64
-    def __init__(self, image_size, layer, chebNum, prefix=False):
+    def __init__(self, image_size, layer, chebNum, initMethod='kaimingU'):
         super(ButterFlyNet_Identical,self).__init__()
         self.image_size = image_size
-        self.encoderset = ButterFlyNet2D(1, image_size, image_size, layer, chebNum, 0, image_size, 0, image_size, prefix, True).cuda()
-        self.decoderset = ButterFlyNet2D_IDFT(1, 0, image_size, 0, image_size, image_size, image_size, layer, chebNum, prefix, True).cuda()
+        self.encoderset = ButterFlyNet2D(1, image_size, image_size, layer, chebNum, 0, image_size, 0, image_size, initMethod, True).cuda()
+        self.decoderset = ButterFlyNet2D_IDFT(1, 0, image_size, 0, image_size, image_size, image_size, layer, chebNum, initMethod, True).cuda()
     def forward(self, inputdata):
 
         res = self.decoderset(self.encoderset(inputdata))

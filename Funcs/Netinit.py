@@ -1,7 +1,7 @@
 import torch
 from ButterFlyNet_Identical import ButterFlyNet_Identical
 
-def Netinit(local_size,net_layer,cheb_num,Resume,prefix,pretrain,pthpath):
+def Netinit(local_size,net_layer,cheb_num,Resume,initMethod,pretrain,pthpath):
     if Resume:
         print('Resume. Loading...')
         Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num).cuda()
@@ -25,14 +25,13 @@ def Netinit(local_size,net_layer,cheb_num,Resume,prefix,pretrain,pthpath):
         print('\nGenerating Net...')
         Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num).cuda()
         try:
-            path = '../../Pths/Base' + '/{}_{}_{}_{}_{}.pth'.format(local_size,net_layer,cheb_num,prefix,pretrain)
+            path = '../../Pths/Base' + '/{}_{}_{}_{}_{}.pth'.format(local_size,net_layer,cheb_num,initMethod,pretrain)
             Net.load_state_dict(torch.load(path))
             print('Paras have been created. Loaded.')
         except Exception:
             print('Need to initialize from the bottom.')
-            if prefix:
-                print('\nGenerating Net...')
-                Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,prefix).cuda()
+            print('\nGenerating Net...')
+            Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,initMethod).cuda()
             if pretrain:
                 Net.pretrain(200)
             print('Done.')

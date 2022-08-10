@@ -21,7 +21,7 @@ class ButterFlyNet2D(nn.Module):
                  layer_number, chebyshev_number,
                  left_frequency_kx, right_frequency_kx,
                  left_frequency_ky, right_frequency_ky,
-                 prefixed, positivereal):
+                 initMethod, positivereal):
         super(ButterFlyNet2D, self).__init__()
 
         self.in_channel_num         = in_channel
@@ -42,7 +42,7 @@ class ButterFlyNet2D(nn.Module):
         self.frequency_kx_uni_dots  = np.array(range(left_frequency_kx, right_frequency_kx))
         self.frequency_ky_uni_dots  = np.array(range(left_frequency_ky, right_frequency_ky))
         self.plot_x, self.plot_y    = np.meshgrid(self.frequency_kx_uni_dots, self.frequency_ky_uni_dots)
-        self.prefixed               = prefixed
+        self.initMethod             = initMethod
         self.positivereal           = positivereal
         self.conv_dict              = self.Generate_Convs()
 
@@ -77,7 +77,7 @@ class ButterFlyNet2D(nn.Module):
         conv_dict.update(conv_dict_first)
         conv_dict.update(conv_dict_rcs)
         conv_dict.update(conv_dict_ft)
-        if self.prefixed:
+        if self.initMethod == 'Fourier':
             conv_Weights_dict_first = {str((0, in_channel, 0, 0)):
                                            self.generate_First_Layer_Weights()
                                        for in_channel in range(self.in_channel_num)}
@@ -100,10 +100,19 @@ class ButterFlyNet2D(nn.Module):
             for key in conv_dict.keys():
                 conv_dict[key].weight   = conv_Weights_dict[key]
                 conv_dict[key].bias     = nn.Parameter(torch.zeros_like(conv_dict[key].bias, dtype=torch.float32))
-        else:
+        elif self.initMethod == 'kaimingU':
             for key in conv_dict.keys():
                 nn.init.kaiming_uniform_(conv_dict[key].weight)
-                nn.init.uniform_(conv_dict[key].bias)
+                nn.init.constant_(conv_dict[key].bias,0.0)
+        elif self.initMethod == 'kaimingN':
+            for key in conv_dict.keys():
+                nn.init.kaiming_normal_(conv_dict[key].weight)
+                nn.init.constant_(conv_dict[key].bias,0.0)
+
+        elif self.initMethod == 'orthogonal':
+            for key in conv_dict.keys():
+                nn.init.orthogonal_(conv_dict[key].weight)
+                nn.init.constant_(conv_dict[key].bias,0.0)
         return nn.ModuleDict(conv_dict)
 
 
