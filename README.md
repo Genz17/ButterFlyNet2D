@@ -56,15 +56,15 @@ Mainly contain training parts.
 Adjust settings in ```settings.json```:
 ```
 {
-    "datasetName": "Celeba", // choose from Celeba, CIFAR10, STL10
-    "task": "Inpaint", // choose from Inpaint Deblur Denoise Linewatermark
+    "datasetName": "Celeba", 
+    "task": "Inpaint", 
     "epoches": 12,
     "batch_size_train": 20,
     "image_size": 64,
     "local_size": 64,
     "net_layer": 6,
     "cheb_num": 2,
-    "initMethod": "Fourier", // choose from Fourier, kaimingU, kaimingN, orthogonal
+    "initMethod": "Fourier", 
     "pretrain" : true,
     "resume": true 
 }
