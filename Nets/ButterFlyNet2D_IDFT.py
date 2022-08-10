@@ -104,6 +104,7 @@ class ButterFlyNet2D_IDFT(nn.Module):
                 nn.init.orthogonal_(conv_dict[key].weight)
                 nn.init.constant_(conv_dict[key].bias,0.0)
 
+        return  nn.ModuleDict(conv_dict)
     def forward(self, input_data):
 
         input_data = self.split(input_data).cuda()

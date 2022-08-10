@@ -6,19 +6,19 @@ Here stored some supportive functions which will be used in the building-up, tra
 
 Before the training process, we highly recommend you to run ``` BaseInitGenerate.py ``` in this folder like this:
 ```
-python BaseInitGenerate.py <input size> <layer number> <cheb num> <prefix> <pretrain>    
+python BaseInitGenerate.py <input size> <layer number> <cheb num> <initMethod> <pretrain>    
 ```
 This will do the initialization and save the parameters which can be reused in training.
 
 We recommend you to run 
 ```
-python BaseInitGenerate.py 64 6 2 True True
+python BaseInitGenerate.py 64 6 2 Fourier True
 ```
 ```
-python BaseInitGenerate.py 32 5 2 True True
+python BaseInitGenerate.py 32 5 2 Fourier True
 ```
 ```
-python BaseInitGenerate.py 16 4 2 True True
+python BaseInitGenerate.py 16 4 2 Fourier True
 ```
 at first. These could be used in training.
 
@@ -45,7 +45,7 @@ This is a neural network that put all the parameters in Butterfly Algorithm into
 ## Test
 Mainly contain test parts. ```Test.py``` is implemented for testing, while other programs are for corresponding task's testing process. Test will be done during the training process. If you want to execute ```Test.py ``` only, run in this form:
 ```
-python <task name> <dataset name> <image size> <local size> <net layer> <cheb num> <prefix> <pretrain> <pic>
+python <task name> <dataset name> <image size> <local size> <net layer> <cheb num> <initMethod> <pretrain> <pic>
 ```
 Here the option ```<pic>``` is for whether you want to save images.
 

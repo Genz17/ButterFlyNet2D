@@ -16,6 +16,8 @@ from Test                   import test
 setup_seed(17)
 
 #### Here are the settings to the training ###
+with open('settins.json') as f:
+    settings        = json.load(f)
 settings            = open('settings.json')
 datasetName         = settings['datasetName']
 task                = settings['task']

@@ -24,6 +24,6 @@ if __name__ == "__main__":
     image_size  = int(sys.argv[1])
     layer       = int(sys.argv[2])
     chebNum     = int(sys.argv[3])
-    prefix      = eval(sys.argv[4])
+    initMethod  = sys.argv[4]
     pretrain    = eval(sys.argv[5])
     initgen()

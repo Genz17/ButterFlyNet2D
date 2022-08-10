@@ -67,13 +67,11 @@ if __name__ == '__main__':
     local_size  = int(sys.argv[4])
     net_layer   = int(sys.argv[5])
     cheb_num    = int(sys.argv[6])
-    prefix      = eval(sys.argv[7])
+    initMethod  = sys.argv[7]
     pretrain    = eval(sys.argv[8])
     pic         = eval(sys.argv[9])
-    if prefix:
-        p1 = 'prefix'
-    else:
-        p1 = 'noprefix'
+
+    p1 = initMethod
     if pretrain:
         p2 = 'pretrain'
     else:
