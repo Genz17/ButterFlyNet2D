@@ -48,7 +48,7 @@ print('\n')
 print('Image will be saved to: ' + imgpath)
 
 train_loader, test_loader                       = load_dataset(task, datasetName, batch_size_train, batch_size_test, image_size, local_size, p1, p2)
-Net, optimizer, scheduler, startEpoch,lossList  = Netinit(local_size, net_layer, cheb_num, Resume, prefix, pretrain, pthpath)
+Net, optimizer, scheduler, startEpoch,lossList  = Netinit(local_size, net_layer, cheb_num, Resume, initMethod, pretrain, pthpath)
 
 ##############################################
 

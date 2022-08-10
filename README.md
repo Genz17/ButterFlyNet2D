@@ -53,15 +53,23 @@ Here the option ```<pic>``` is for whether you want to save images.
 
 Mainly contain training parts. 
 
-Run ``` train.py ``` in such form:
-
+Adjust settings in ```settings.json```:
 ```
-python -u train.py <dataset name> <task name> <epoches> <batch size> <input size> <net input size> <net layer> <cheb num> <prefix> <pretrain> <resume>
+{
+    "datasetName": "Celeba", // choose from Celeba, CIFAR10, STL10
+    "task": "Inpaint", // choose from Inpaint Deblur Denoise Linewatermark
+    "epoches": 12,
+    "batch_size_train": 20,
+    "image_size": 64,
+    "local_size": 64,
+    "net_layer": 6,
+    "cheb_num": 2,
+    "initMethod": "Fourier", // choose from Fourier, kaimingU, kaimingN, orthogonal
+    "pretrain" : true,
+    "resume": true 
+}
 ```
-
-For example:
+Then run ```train.py```:
 ```
-python -u train.py Celeba Inpaint 12 12 128 64 5 2 True True False
+python train.py
 ```
-
-
