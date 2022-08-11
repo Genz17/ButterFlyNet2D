@@ -6,9 +6,9 @@ Here stored some supportive functions which will be used in the building-up, tra
 
 Before the training process, we highly recommend you to run ` BaseInitGenerate.py ` in this folder like this:
 
-`
+```
 python BaseInitGenerate.py <input size> <layer number> <cheb num> <initMethod> <pretrain>    
-`
+```
 
 This will do the initialization and save the parameters which can be reused in training.
 
