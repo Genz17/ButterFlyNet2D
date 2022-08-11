@@ -4,10 +4,12 @@ This is a repository for ButterFlyNet2D.
 ## Funcs
 Here stored some supportive functions which will be used in the building-up, training or testing process.
 
-Before the training process, we highly recommend you to run ``` BaseInitGenerate.py ``` in this folder like this:
-```
+Before the training process, we highly recommend you to run ` BaseInitGenerate.py ` in this folder like this:
+
+`
 python BaseInitGenerate.py <input size> <layer number> <cheb num> <initMethod> <pretrain>    
-```
+`
+
 This will do the initialization and save the parameters which can be reused in training.
 
 ## Nets
@@ -15,17 +17,20 @@ This will do the initialization and save the parameters which can be reused in t
 Core neural networks are stored here. 
 
 ## Test
-Mainly contain test parts. ```Test.py``` is implemented for testing, while other programs are for corresponding task's testing process. Test will be done during the training process. If you want to execute ```Test.py ``` only, run in this form:
+Mainly contain test parts. `Test.py` is implemented for testing, while other programs are for corresponding task's testing process. Test will be done during the training process. If you want to execute `Test.py`  only, run in this form:
+
 ```
 python <task name> <dataset name> <image size> <local size> <net layer> <cheb num> <initMethod> <pretrain> <pic>
 ```
-Here the option ```<pic>``` is for whether you want to save images.
+
+Here the option `<pic>` is for whether you want to save images.
 
 ## Train
 
 Mainly contain training parts. 
 
-Adjust settings in ```settings.json```:
+Adjust settings in `settings.json`:
+
 ```
 {
     "datasetName": "Celeba", 
@@ -41,7 +46,9 @@ Adjust settings in ```settings.json```:
     "resume": true 
 }
 ```
-Then run ```train.py```:
+
+Then run `train.py`:
+
 ```
 python train.py
 ```
