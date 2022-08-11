@@ -10,37 +10,9 @@ python BaseInitGenerate.py <input size> <layer number> <cheb num> <initMethod> <
 ```
 This will do the initialization and save the parameters which can be reused in training.
 
-We recommend you to run 
-```
-python BaseInitGenerate.py 64 6 2 Fourier True
-```
-```
-python BaseInitGenerate.py 32 5 2 Fourier True
-```
-```
-python BaseInitGenerate.py 16 4 2 Fourier True
-```
-at first. These could be used in training.
-
 ## Nets
 
-Core neural networks are stored here.
-
-- **```ButterFlyNet2D.py```, ```ButterFlyNet2D_IDFT.py```**
-These are a pair of neural networks that put the non-zero parameters in Butterfly Algorithm into CNN. ButterFlyNet2D is for DFT, meanwhile ButterFlyNet2D_IDFT is for IDFT.  
-
-- **```ButterFlyNet2D_CNN.py```, ```ButterFlyNet2D_CNN_IDFT.py```**
-These are a pair of neural networks that put all the parameters in Butterfly Algorithm into CNN. ButterFlyNet2D_CNN is for DFT, meanwhile ButterFlyNet2D_CNN_IDFT is for IDFT.
-
-- **```ButterFlyNet2D_Flexible.py```, ```ButterFlyNet2D_Flexible_IDFT.py```**
-These are a pair of neural networks that put the non-zero parameters in Butterfly Algorithm into CNN. ButterFlyNet2D is for DFT, meanwhile ButterFlyNet2D_IDFT is for IDFT. But the implementation make the stride from bigger than 1 into 1.
-
-- **```ButterFlyNet2D_CNN_Flexible.py```**
-This is a neural network that put all the parameters in Butterfly Algorithm into CNN. ButterFlyNet2D_CNN is for DFT. But the implementation make the stride from bigger than 1 into 1.
-
-- **```ButterFlyNet2D_Identicle.py```**
-  Assembles the ButterFlyNet2D and ButterFlyNet2D_IDFT into one whole neural network.
-
+Core neural networks are stored here. 
 
 ## Test
 Mainly contain test parts. ```Test.py``` is implemented for testing, while other programs are for corresponding task's testing process. Test will be done during the training process. If you want to execute ```Test.py ``` only, run in this form:
