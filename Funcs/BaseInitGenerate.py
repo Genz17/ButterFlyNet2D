@@ -2,8 +2,6 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(__file__,'..','..','Nets')))
 import torch
-import torchvision
-from torch.utils.data import DataLoader
 from ButterFlyNet_Identical import ButterFlyNet_Identical
 from SeedSetup import setup_seed
 
@@ -12,7 +10,7 @@ setup_seed(17)
 def initgen():
 
     print('Generating Net...')
-    Net = ButterFlyNet_Identical(image_size, layer, chebNum, prefix)
+    Net = ButterFlyNet_Identical(image_size, layer, chebNum, initMethod)
     print('Done.\n')
     if pretrain:
         print('PreTrain...')
