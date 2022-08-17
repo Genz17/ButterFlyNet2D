@@ -14,7 +14,8 @@ This will do the initialization and save the parameters which can be reused in t
 
 ## Nets
 
-Core neural networks are stored here. 
+Core neural networks are stored here. You may see the structure in `Img/Example.svg`, which is an example of ButterFlyNet2D with 2 layers and 2 cheb num,  dealing with $4\times4$ input. The picture is
+drawed through netron.
 
 ## Test
 Mainly contain test parts. `Test.py` is implemented for testing, while other programs are for corresponding task's testing process. Test will be done during the training process. If you want to execute `Test.py`  only, run in this form:
