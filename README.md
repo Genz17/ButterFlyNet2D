@@ -7,7 +7,7 @@ Here stored some supportive functions which will be used in the building-up, tra
 Before the training process, we highly recommend you to run ` BaseInitGenerate.py ` in this folder like this:
 
 ```
-python BaseInitGenerate.py <input size> <layer number> <cheb num> <initMethod> <pretrain>    
+python BaseInitGenerate.py <input size> <layer number> <cheb num> <initMethod> <pretrain> <net type>    
 ```
 
 This will do the initialization and save the parameters which can be reused in training.
@@ -30,7 +30,7 @@ Here the option `<pic>` is for whether you want to save images.
 
 Mainly contain training parts. 
 
-Adjust settings in `settings.json`:
+If you want to do the training tasks, adjust settings in `settings.json`:
 
 ```
 {
@@ -53,3 +53,11 @@ Then run `train.py`:
 ```
 python train.py
 ```
+
+If you want to do the Fourier Transform Approximation part, do
+```
+python FTApprox.py <test type> <corresponding number> <inputSize> Fourier <net type> <train>
+```
+here `<test type>` could be `layer` or `cheb`, `<correspoding number>` then become fixed cheb num or layer num. `<net type>` is designed for whether it is DFT or IDFT operator, could be `f` or `b`. `<train>` is to test
+the approximation power before or after training, simply choose from `True` or `False`. We recommend you to do the `BaseInitGenerate.py` if you want to see the approximation power after training. This
+could save you some time.

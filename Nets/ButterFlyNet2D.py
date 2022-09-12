@@ -115,7 +115,6 @@ class ButterFlyNet2D(nn.Module):
                 nn.init.constant_(conv_dict[key].bias,0.0)
         return nn.ModuleDict(conv_dict)
 
-
     def forward(self, input_data):
         input_data = self.split(input_data).cuda()
 
