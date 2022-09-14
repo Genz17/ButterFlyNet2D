@@ -10,7 +10,7 @@ setup_seed(17)
 def initgen():
 
     print('Generating Net...')
-    Net = ButterFlyNet_Identical(image_size, layer, chebNum, initMethod,part)
+    Net = ButterFlyNet_Identical(image_size, layer, chebNum, initMethod, part)
     print('Done.\n')
     if pretrain:
         print('PreTrain...')

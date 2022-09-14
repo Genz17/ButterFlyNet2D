@@ -13,11 +13,11 @@ class ButterFlyNet_Identical(nn.Module):
             self.encoderset = ButterFlyNet2D(1, image_size, image_size, layer, chebNum, 0, image_size, 0, image_size, initMethod, True).cuda()
             self.decoderset = ButterFlyNet2D_IDFT(1, 0, image_size, 0, image_size, image_size, image_size, layer, chebNum, initMethod, True).cuda()
         if self.part == 'f':
-            self.encoderset = ButterFlyNet2D(1, image_size, image_size, layer, chebNum, 0, image_size, 0, image_size, initMethod, True).cuda()
+            self.encoderset = ButterFlyNet2D(1, image_size, image_size, layer, chebNum, 0, image_size, 0, image_size, initMethod, False).cuda()
             self.decoderset = lambda x:x
         if self.part == 'b':
             self.encoderset = lambda x:x
-            self.decoderset = ButterFlyNet2D_IDFT(1, 0, image_size, 0, image_size, image_size, image_size, layer, chebNum, initMethod, True).cuda()
+            self.decoderset = ButterFlyNet2D_IDFT(1, 0, image_size, 0, image_size, image_size, image_size, layer, chebNum, initMethod, False).cuda()
     def forward(self, inputdata):
 
         res = self.decoderset(self.encoderset(inputdata))
@@ -25,9 +25,8 @@ class ButterFlyNet_Identical(nn.Module):
         return res
 
     def pretrain(self,iter):
-        optimizer_encoder = torch.optim.Adam(self.encoderset.parameters(),1e-3)
-        optimizer_decoder = torch.optim.Adam(self.decoderset.parameters(),1e-3)
         if self.part == 'All' or 'f':
+            optimizer_encoder = torch.optim.Adam(self.encoderset.parameters(),1e-3)
             print('Fourier Transform Approximation...')
             for i in range(iter):
                 data = torch.rand(20,1,self.image_size,self.image_size, device='cuda:0')
@@ -40,6 +39,7 @@ class ButterFlyNet_Identical(nn.Module):
                 print('{}/{},\trel err: {}'.format(i+1,iter,loss.item()))
             print('Done.')
         if self.part == 'All' or 'b':
+            optimizer_decoder = torch.optim.Adam(self.decoderset.parameters(),1e-3)
             print('Inverse Fourier Transform Approximation...')
             for i in range(iter):
                 data = torch.rand(20,1,self.image_size,self.image_size, device='cuda:0')
