@@ -10,16 +10,12 @@ setup_seed(17)
 def initgen():
 
     print('Generating Net...')
-    Net = ButterFlyNet_Identical(image_size, layer, chebNum, initMethod, part)
+    Net = ButterFlyNet_Identical(image_size, layer, chebNum, initMethod)
     print('Done.\n')
     if pretrain:
         print('PreTrain...')
         Net.pretrain(200)
-    if part == 'All':
-        path = '../../Pths/Base' + '/{}_{}_{}_{}_{}.pth'.format(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4],sys.argv[5])
-    else:
-        path = '../../Pths/Part' + '/{}_{}_{}_{}_{}_{}.pth'.format(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4],sys.argv[5],sys.argv[6])
-
+    path = '../../Pths/Base' + '/{}_{}_{}_{}_{}.pth'.format(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4],sys.argv[5])
     torch.save(Net.state_dict(),path)
 
 if __name__ == "__main__":
@@ -28,5 +24,4 @@ if __name__ == "__main__":
     chebNum     = int(sys.argv[3])
     initMethod  = sys.argv[4]
     pretrain    = eval(sys.argv[5])
-    part        = sys.argv[6]
     initgen()

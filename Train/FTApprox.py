@@ -28,15 +28,23 @@ def main(testType,Num,inputSize,initMethod,netType,pretrain):
             print(layerNum,int(math.log2(inputSize)))
             Net = ButterFlyNet_Identical(inputSize, layerNum, chebNum, initMethod, netType)
             if pretrain:
+                path = '../../Pths/Part' + '/{}_{}_{}_{}_{}_{}.pth'.format(inputSize,layerNum,chebNum,initMethod,pretrain,netType)
                 try:
-                    path = '../../Pths/Part' + '/{}_{}_{}_{}_{}_{}.pth'.format(inputSize,layerNum,chebNum,initMethod,pretrain,netType)
                     Net.load_state_dict(torch.load(path))
                 except BaseException:
                     Net.pretrain(200)
-            out = Net(out_ft)
-            err1 = torch.norm(out-data,1)/torch.norm(data,1)
-            err2 = torch.norm(out-data,2)/torch.norm(data,2)
-            errinf = torch.norm(out-data,np.inf)/torch.norm(data,np.inf)
+                    torch.save(Net.state_dict(),path)
+            if netType == 'f':
+                out = Net(data)
+                err1 = torch.norm(out-out_ft,1)/torch.norm(out_ft,1)
+                err2 = torch.norm(out-out_ft,2)/torch.norm(out_ft,2)
+                errinf = torch.norm(out-out_ft,np.inf)/torch.norm(out_ft,np.inf)
+
+            if netType == 'b':
+                out = Net(out_ft)
+                err1 = torch.norm(out-data,1)/torch.norm(data,1)
+                err2 = torch.norm(out-data,2)/torch.norm(data,2)
+                errinf = torch.norm(out-data,np.inf)/torch.norm(data,np.inf)
             print('1-norm err: {}\n2-norm err: {}\ninf-norm err: {}\n'.format(err1.item(),err2.item(),errinf.item()))
             lossList1.append(err1.item())
             lossList2.append(err2.item())
@@ -65,15 +73,23 @@ def main(testType,Num,inputSize,initMethod,netType,pretrain):
             print(chebNum)
             Net = ButterFlyNet_Identical(inputSize, layerNum, chebNum, initMethod, netType)
             if pretrain:
+                path = '../../Pths/Part' + '/{}_{}_{}_{}_{}_{}.pth'.format(inputSize,layerNum,chebNum,initMethod,pretrain,netType)
                 try:
-                    path = '../../Pths/Part' + '/{}_{}_{}_{}_{}_{}.pth'.format(inputSize,layerNum,chebNum,initMethod,pretrain,netType)
                     Net.load_state_dict(torch.load(path))
                 except BaseException:
                     Net.pretrain(200)
-            out = Net(out_ft)
-            err1 = torch.norm(out-data,1)/torch.norm(data,1)
-            err2 = torch.norm(out-data,2)/torch.norm(data,2)
-            errinf = torch.norm(out-data,np.inf)/torch.norm(data,np.inf)
+                    torch.save(Net.state_dict(),path)
+            if netType == 'f':
+                out = Net(data)
+                err1 = torch.norm(out-out_ft,1)/torch.norm(out_ft,1)
+                err2 = torch.norm(out-out_ft,2)/torch.norm(out_ft,2)
+                errinf = torch.norm(out-out_ft,np.inf)/torch.norm(out_ft,np.inf)
+
+            if netType == 'b':
+                out = Net(out_ft)
+                err1 = torch.norm(out-data,1)/torch.norm(data,1)
+                err2 = torch.norm(out-data,2)/torch.norm(data,2)
+                errinf = torch.norm(out-data,np.inf)/torch.norm(data,np.inf)
             print('1-norm err: {}\n2-norm err: {}\ninf-norm err: {}\n'.format(err1.item(),err2.item(),errinf.item()))
             lossList1.append(err1.item())
             lossList2.append(err2.item())
@@ -96,9 +112,9 @@ def main(testType,Num,inputSize,initMethod,netType,pretrain):
 if __name__ == '__main__':
     testType        = sys.argv[1]
     if testType == 'layer':
-        chebNum     = int(sys.argv[2])
+        Num     = int(sys.argv[2])
     if testType == 'cheb':
-        layerNum    = int(sys.argv[2])
+        Num    = int(sys.argv[2])
     inputSize       = int(sys.argv[3])
     initMethod      = sys.argv[4]
     netType         = sys.argv[5]
