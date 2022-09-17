@@ -61,7 +61,7 @@ def main(testType,Num,inputSize,initMethod,netType,pretrain):
         plt.legend(['1-norm','2-norm','inf-norm'])
         plt.title('err-layerNum')
         plt.xticks(range(1, int(math.log2(inputSize))+1))
-        plt.savefig('./layertest_{}_{}.eps'.format(inputSize, netType))
+        plt.savefig('./layertest_{}_{}_{}.eps'.format(inputSize, netType, pretrain))
         plt.show()
 
     if testType == 'cheb':
@@ -106,7 +106,7 @@ def main(testType,Num,inputSize,initMethod,netType,pretrain):
         plt.legend(['1-norm','2-norm','inf-norm'])
         plt.title('err-chebNum')
         plt.xticks(range(1, 7))
-        plt.savefig('./chebtest_{}_{}.eps'.format(inputSize, netType))
+        plt.savefig('./chebtest_{}_{}_{}.eps'.format(inputSize, netType, pretrain))
         plt.show()
 
 if __name__ == '__main__':

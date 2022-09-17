@@ -3,23 +3,27 @@ from ButterFlyNet_Identical import ButterFlyNet_Identical
 
 def Netinit(local_size,net_layer,cheb_num,Resume,initMethod,pretrain,pthpath):
     if Resume:
-        print('Resume. Loading...')
-        Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num).cuda()
-        optimizer = torch.optim.Adam(Net.parameters())
-        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.98, patience=100, verbose=True,
-                                                                threshold=0.00005, threshold_mode='rel', cooldown=3, min_lr=0, eps=1e-16)
+        try:
+            print('Resume. Loading...')
+            Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num).cuda()
+            optimizer = torch.optim.Adam(Net.parameters())
+            scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.98, patience=100, verbose=True,
+                                                                    threshold=0.00005, threshold_mode='rel', cooldown=3, min_lr=0, eps=1e-16)
 
-        checkPoint = torch.load(pthpath)
-        lossList = checkPoint['lossList']
-        Net.load_state_dict(checkPoint['Net'])
-        optimizer.load_state_dict(checkPoint['optimizer'])
-        scheduler.load_state_dict(checkPoint['scheduler'])
-        startEpoch = checkPoint['epoch']
-        print('Done.\n')
+            checkPoint = torch.load(pthpath)
+            lossList = checkPoint['lossList']
+            Net.load_state_dict(checkPoint['Net'])
+            optimizer.load_state_dict(checkPoint['optimizer'])
+            scheduler.load_state_dict(checkPoint['scheduler'])
+            startEpoch = checkPoint['epoch']
+            print('Done.\n')
 
-        print('Starts from epoch {}.'.format(startEpoch))
-        for group in optimizer.param_groups:
-            print('Learning Rate: {}.'.format(group['lr']))
+            print('Starts from epoch {}.'.format(startEpoch))
+            for group in optimizer.param_groups:
+                print('Learning Rate: {}.'.format(group['lr']))
+        except BaseException:
+            print('Resume Failed. Now initialize from bottom.')
+            return Netinit(local_size,net_layer,cheb_num,False,initMethod,pretrain,pthpath)
 
     else:
         print('\nGenerating Net...')
