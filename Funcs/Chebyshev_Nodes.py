@@ -10,7 +10,7 @@ def Chebyshev_Nodes(dom, r):
     '''
     w_x = dom[1] - dom[0]
     center_x = (w_x / 2) + dom[0]
-    Chebyshev_Grid = np.array([w_x*0.5*np.cos((2*t+1)*math.pi/(2*r+2))+center_x for t in range(1, r+1, 1)])
+    Chebyshev_Grid = np.array([w_x*0.5*np.cos((2*t-1)*math.pi/(2*r))+center_x for t in range(1, r+1, 1)])
     nodes = np.array(Chebyshev_Grid)
 
     return nodes
