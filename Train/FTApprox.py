@@ -16,8 +16,8 @@ setup_seed(17)
 
 
 def main(testType,Num,inputSize,initMethod,netType,pretrain):
-    data            = torch.rand(1,1,inputSize,inputSize, dtype=torch.complex64).cuda() # choose something you like
-    out_ft          = torch.fft.fft2(data).cuda()
+    dataTest            = torch.rand(1,1,inputSize,inputSize, dtype=torch.complex64).cuda() # choose something you like
+    outTest_ft          = torch.fft.fft2(dataTest).cuda()
 
     if testType == 'layer':
         chebNum = Num
@@ -35,16 +35,16 @@ def main(testType,Num,inputSize,initMethod,netType,pretrain):
                     Net.pretrain(200)
                     torch.save(Net.state_dict(),path)
             if netType == 'f':
-                out = Net(data)
-                err1 = torch.norm(out-out_ft,1)/torch.norm(out_ft,1)
-                err2 = torch.norm(out-out_ft,2)/torch.norm(out_ft,2)
-                errinf = torch.norm(out-out_ft,np.inf)/torch.norm(out_ft,np.inf)
+                out = Net(dataTest)
+                err1 = torch.norm(out-outTest_ft,1)/torch.norm(outTest_ft,1)
+                err2 = torch.norm(out-outTest_ft,2)/torch.norm(outTest_ft,2)
+                errinf = torch.norm(out-outTest_ft,np.inf)/torch.norm(outTest_ft,np.inf)
 
             if netType == 'b':
-                out = Net(out_ft)
-                err1 = torch.norm(out-data,1)/torch.norm(data,1)
-                err2 = torch.norm(out-data,2)/torch.norm(data,2)
-                errinf = torch.norm(out-data,np.inf)/torch.norm(data,np.inf)
+                out = Net(outTest_ft)
+                err1 = torch.norm(out-dataTest,1)/torch.norm(dataTest,1)
+                err2 = torch.norm(out-dataTest,2)/torch.norm(dataTest,2)
+                errinf = torch.norm(out-dataTest,np.inf)/torch.norm(dataTest,np.inf)
             print('1-norm err: {}\n2-norm err: {}\ninf-norm err: {}\n'.format(err1.item(),err2.item(),errinf.item()))
             lossList1.append(err1.item())
             lossList2.append(err2.item())
@@ -80,16 +80,16 @@ def main(testType,Num,inputSize,initMethod,netType,pretrain):
                     Net.pretrain(200)
                     torch.save(Net.state_dict(),path)
             if netType == 'f':
-                out = Net(data)
-                err1 = torch.norm(out-out_ft,1)/torch.norm(out_ft,1)
-                err2 = torch.norm(out-out_ft,2)/torch.norm(out_ft,2)
-                errinf = torch.norm(out-out_ft,np.inf)/torch.norm(out_ft,np.inf)
+                out = Net(dataTest)
+                err1 = torch.norm(out-outTest_ft,1)/torch.norm(outTest_ft,1)
+                err2 = torch.norm(out-outTest_ft,2)/torch.norm(outTest_ft,2)
+                errinf = torch.norm(out-outTest_ft,np.inf)/torch.norm(outTest_ft,np.inf)
 
             if netType == 'b':
-                out = Net(out_ft)
-                err1 = torch.norm(out-data,1)/torch.norm(data,1)
-                err2 = torch.norm(out-data,2)/torch.norm(data,2)
-                errinf = torch.norm(out-data,np.inf)/torch.norm(data,np.inf)
+                out = Net(outTest_ft)
+                err1 = torch.norm(out-dataTest,1)/torch.norm(dataTest,1)
+                err2 = torch.norm(out-dataTest,2)/torch.norm(dataTest,2)
+                errinf = torch.norm(out-dataTest,np.inf)/torch.norm(dataTest,np.inf)
             print('1-norm err: {}\n2-norm err: {}\ninf-norm err: {}\n'.format(err1.item(),err2.item(),errinf.item()))
             lossList1.append(err1.item())
             lossList2.append(err2.item())

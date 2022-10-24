@@ -25,11 +25,11 @@ class ButterFlyNet_Identical(nn.Module):
         return res
 
     def pretrain(self,iter):
-        if self.part == 'All' or 'f':
+        if (self.part == 'All') or (self.part == 'f'):
             optimizer_encoder = torch.optim.Adam(self.encoderset.parameters(),1e-3)
             print('Fourier Transform Approximation...')
             for i in range(iter):
-                data = torch.rand(20,1,self.image_size,self.image_size, device='cuda:0')
+                data = torch.rand(20,1,self.image_size,self.image_size,dtype=torch.complex64,device='cuda:0')
                 data_ft = torch.fft.fft2(data)
                 out = self.encoderset(data)
                 optimizer_encoder.zero_grad()
@@ -38,11 +38,11 @@ class ButterFlyNet_Identical(nn.Module):
                 optimizer_encoder.step()
                 print('{}/{},\trel err: {}'.format(i+1,iter,loss.item()))
             print('Done.')
-        if self.part == 'All' or 'b':
+        if (self.part == 'All') or (self.part == 'b'):
             optimizer_decoder = torch.optim.Adam(self.decoderset.parameters(),1e-3)
             print('Inverse Fourier Transform Approximation...')
             for i in range(iter):
-                data = torch.rand(20,1,self.image_size,self.image_size, device='cuda:0')
+                data = torch.rand(20,1,self.image_size,self.image_size,dtype=torch.complex64,device='cuda:0')
                 data_ft = torch.fft.fft2(data)
                 out = self.decoderset(data_ft)
                 optimizer_decoder.zero_grad()

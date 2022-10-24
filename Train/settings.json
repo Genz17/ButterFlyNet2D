@@ -1,13 +1,13 @@
 {
-    "datasetName": "Celeba", 
-    "task": "Inpaint", 
+    "datasetName": "STL10",
+   	"task": "Linewatermark",
     "epoches": 12,
-    "batch_size_train": 20,
+    "batch_size_train": 5,
     "image_size": 64,
-    "local_size": 64,
-    "net_layer": 6,
+    "local_size": 16,
+    "net_layer": 4,
     "cheb_num": 2,
-    "initMethod": "Fourier", 
-    "pretrain" : true,
-    "resume": true 
+    "initMethod": "Fourier",
+    "pretrain" : false,
+    "resume": false
 }
