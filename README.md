@@ -7,7 +7,7 @@ Here stored some supportive functions which will be used in the building-up, tra
 Before the training process, we highly recommend you to run ` BaseInitGenerate.py ` in this folder like this:
 
 ```
-python BaseInitGenerate.py <input size> <layer number> <cheb num> <initMethod> <pretrain>    
+python BaseInitGenerate.py <input size> <layer number> <cheb num> <initMethod> <pretrain>
 ```
 
 This will do the initialization and save the parameters which can be reused in training.
@@ -28,23 +28,23 @@ Here the option `<pic>` is for whether you want to save images.
 
 ## Train
 
-Mainly contain training parts. 
+Mainly contain training parts.
 
 If you want to do the training tasks, adjust settings in `settings.json`:
 
 ```
 {
-    "datasetName": "Celeba", 
-    "task": "Inpaint", 
+    "datasetName": "Celeba",
+    "task": "Inpaint",
     "epoches": 12,
     "batch_size_train": 20,
     "image_size": 64,
     "local_size": 64,
     "net_layer": 6,
     "cheb_num": 2,
-    "initMethod": "Fourier", 
+    "initMethod": "Fourier",
     "pretrain" : true,
-    "resume": false 
+    "resume": false
 }
 ```
 
@@ -60,3 +60,6 @@ python FTApprox.py <test type> <corresponding number> <inputSize> Fourier <net t
 ```
 here `<test type>` could be `layer` or `cheb`, `<correspoding number>` then become fixed cheb num or layer num. `<net type>` is designed for whether it is DFT or IDFT operator, could be `f` or `b`. `<train>` is to test
 the approximation power before or after training, simply choose from `True` or `False`. After training, the parameters will be stored.
+
+## Acknowledgement
+The author thanks <a href="https://github.com/YingzhouLi">Yingzhou Li</a>, the codes are implemented with his great help.
