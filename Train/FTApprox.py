@@ -28,7 +28,7 @@ def main(testType,Num,inputSize,initMethod,netType,pretrain):
             print(layerNum,int(math.log2(inputSize)))
             Net = ButterFlyNet_Identical(inputSize, layerNum, chebNum, initMethod, netType)
             if pretrain:
-                path = '../../Pths/Part' + '/{}_{}_{}_{}_{}_{}.pth'.format(inputSize,layerNum,chebNum,initMethod,pretrain,netType)
+                path = '../Pths/Part' + '/{}_{}_{}_{}_{}_{}.pth'.format(inputSize,layerNum,chebNum,initMethod,pretrain,netType)
                 try:
                     Net.load_state_dict(torch.load(path))
                 except BaseException:
@@ -73,7 +73,7 @@ def main(testType,Num,inputSize,initMethod,netType,pretrain):
             print(chebNum)
             Net = ButterFlyNet_Identical(inputSize, layerNum, chebNum, initMethod, netType)
             if pretrain:
-                path = '../../Pths/Part' + '/{}_{}_{}_{}_{}_{}.pth'.format(inputSize,layerNum,chebNum,initMethod,pretrain,netType)
+                path = '../Pths/Part' + '/{}_{}_{}_{}_{}_{}.pth'.format(inputSize,layerNum,chebNum,initMethod,pretrain,netType)
                 try:
                     Net.load_state_dict(torch.load(path))
                 except BaseException:

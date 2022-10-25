@@ -78,10 +78,10 @@ if __name__ == '__main__':
         p2 = 'nopretrain'
 
     batch_size_test = 256
-    pthpath = '../../Pths/' + task + '/' + p1 + '/' + p2 + '/' + datasetName + '_{}_{}_{}_{}.pth'.format(local_size,image_size,net_layer,cheb_num)
-    imgpath_origin = '../../Images/pics/' + task + '/' + p1 + '/' + p2 + '/' + datasetName + '_{}_{}_{}_{}_or.eps'.format(local_size,image_size,net_layer,cheb_num)
-    imgpath_operated = '../../Images/pics/' + task + '/' + p1 + '/' + p2 + '/' + datasetName + '_{}_{}_{}_{}_op.eps'.format(local_size,image_size,net_layer,cheb_num)
-    imgpath_recover = '../../Images/pics/' + task + '/' + p1 + '/' + p2 + '/' + datasetName + '_{}_{}_{}_{}_re.eps'.format(local_size,image_size,net_layer,cheb_num)
+    pthpath = '../Pths/' + task + '/' + p1 + '/' + p2 + '/' + datasetName + '_{}_{}_{}_{}.pth'.format(local_size,image_size,net_layer,cheb_num)
+    imgpath_origin = '../Images/pics/' + task + '/' + p1 + '/' + p2 + '/' + datasetName + '_{}_{}_{}_{}_or.eps'.format(local_size,image_size,net_layer,cheb_num)
+    imgpath_operated = '../Images/pics/' + task + '/' + p1 + '/' + p2 + '/' + datasetName + '_{}_{}_{}_{}_op.eps'.format(local_size,image_size,net_layer,cheb_num)
+    imgpath_recover = '../Images/pics/' + task + '/' + p1 + '/' + p2 + '/' + datasetName + '_{}_{}_{}_{}_re.eps'.format(local_size,image_size,net_layer,cheb_num)
 
     checkPoint = torch.load(pthpath)
     Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num).cuda()

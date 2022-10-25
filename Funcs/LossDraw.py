@@ -33,8 +33,8 @@ if __name__ == '__main__':
     else:
         p2 = 'nopretrain'
 
-    pthpath = '../../Pths/' + task + '/' + p1 + '/' + p2 + '/' + datasetName + '_{}_{}_{}_{}.pth'.format(local_size,image_size,net_layer,cheb_num)
-    imgpath = '../../Images/' + task + '/' + p1 + '/' + p2 + '/' + datasetName + '_{}_{}_{}_{}.eps'.format(local_size,image_size,net_layer,cheb_num)
+    pthpath = '../Pths/' + task + '/' + p1 + '/' + p2 + '/' + datasetName + '_{}_{}_{}_{}.pth'.format(local_size,image_size,net_layer,cheb_num)
+    imgpath = '../Images/' + task + '/' + p1 + '/' + p2 + '/' + datasetName + '_{}_{}_{}_{}.eps'.format(local_size,image_size,net_layer,cheb_num)
     checkPoint = torch.load(pthpath)
     lossList = checkPoint['lossList']
     epoch = checkPoint['epoch']

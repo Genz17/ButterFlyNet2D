@@ -48,8 +48,8 @@ def load_dataset(task, datasetName, batch_size_train, batch_size_test, image_siz
                                     noiseTransform(0, 0.1)]
 
     if datasetName == 'Celeba':
-        data_path_train = '../../data/celebaselected/' # choose the path where your data is located
-        data_path_test = '../../data/CelebaTest/' # choose the path where your data is located
+        data_path_train = '../data/celebaselected/' # choose the path where your data is located
+        data_path_test = '../data/CelebaTest/' # choose the path where your data is located
 
         train_loader = DataLoader(
             torchvision.datasets.ImageFolder(data_path_train,
@@ -62,8 +62,8 @@ def load_dataset(task, datasetName, batch_size_train, batch_size_test, image_siz
             batch_size=batch_size_test, shuffle=False)
 
     elif datasetName == 'CIFAR10':
-        data_path_train = '../../data/'
-        data_path_test = '../../data/'
+        data_path_train = '../data/'
+        data_path_test = '../data/'
         train_loader = DataLoader(
             torchvision.datasets.CIFAR10(data_path_train,train=True,
                                     transform=torchvision.transforms.Compose(trainTransform)),
@@ -75,8 +75,8 @@ def load_dataset(task, datasetName, batch_size_train, batch_size_test, image_siz
             batch_size=batch_size_test, shuffle=False)
 
     elif datasetName == 'STL10':
-        data_path_train = '../../data/'
-        data_path_test = '../../data/'
+        data_path_train = '../data/'
+        data_path_test = '../data/'
         train_loader = DataLoader(
             torchvision.datasets.STL10(data_path_train,split='train',
                                     transform=torchvision.transforms.Compose(trainTransform)),

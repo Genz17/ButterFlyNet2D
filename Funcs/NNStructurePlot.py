@@ -8,7 +8,7 @@ import torchviz
 def SPlot():
     data = torch.ones(1,1,image_size,image_size)
     Net = ButterFlyNet2D(1, image_size, image_size, layer, chebNum, 0, image_size, 0, image_size, initMethod, True)
-    model_file =  '../../Pths/Base' + '/{}_{}_{}_{}_Graph'.format(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4])
+    model_file =  '../Pths/Base' + '/{}_{}_{}_{}_Graph'.format(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4])
     out = Net(data)
     graph = torchviz.make_dot(out)
     graph.render(model_file)

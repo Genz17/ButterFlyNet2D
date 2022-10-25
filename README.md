@@ -60,5 +60,11 @@ python FTApprox.py <test type> <corresponding number> <inputSize> Fourier <net t
 here `<test type>` could be `layer` or `cheb`, `<correspoding number>` then become fixed cheb num or layer num. `<net type>` is designed for whether it is DFT or IDFT operator, could be `f` or `b`. `<train>` is to test
 the approximation power before or after training, simply choose from `True` or `False`. After training, the parameters will be stored.
 
+## data
+The networks will load data from here by default. CIFAR10 and STL10 dataset are used through PyTorch, and you need to fulfill the CelebaA dataset folder all by yourself.
+
+## Pths & Images
+These two folders are created for storing parameters and images.
+
 ## Acknowledgement
 The author thanks <a href="https://github.com/YingzhouLi">Yingzhou Li</a>, the codes are implemented with his great help.
