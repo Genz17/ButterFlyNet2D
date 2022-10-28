@@ -65,12 +65,12 @@ def load_dataset(task, datasetName, batch_size_train, batch_size_test, image_siz
         data_path_train = '../data/'
         data_path_test = '../data/'
         train_loader = DataLoader(
-            torchvision.datasets.CIFAR10(data_path_train,train=True,
+            torchvision.datasets.CIFAR10(data_path_train,train=True,download=True,
                                     transform=torchvision.transforms.Compose(trainTransform)),
             batch_size=batch_size_train, shuffle=True)
 
         test_loader = DataLoader(
-            torchvision.datasets.CIFAR10(data_path_test,train=False,
+            torchvision.datasets.CIFAR10(data_path_test,train=False,download=True,
                                     transform=torchvision.transforms.Compose(testTransform)),
             batch_size=batch_size_test, shuffle=False)
 
@@ -78,12 +78,12 @@ def load_dataset(task, datasetName, batch_size_train, batch_size_test, image_siz
         data_path_train = '../data/'
         data_path_test = '../data/'
         train_loader = DataLoader(
-            torchvision.datasets.STL10(data_path_train,split='train',
+            torchvision.datasets.STL10(data_path_train,split='train',download=True,
                                     transform=torchvision.transforms.Compose(trainTransform)),
             batch_size=batch_size_train, shuffle=True)
 
         test_loader = DataLoader(
-            torchvision.datasets.STL10(data_path_test,split='test',
+            torchvision.datasets.STL10(data_path_test,split='test',download=True,
                                     transform=torchvision.transforms.Compose(testTransform)),
             batch_size=batch_size_test, shuffle=False)
 
