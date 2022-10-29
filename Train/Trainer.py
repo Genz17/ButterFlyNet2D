@@ -1,9 +1,13 @@
 import torch
 
 def trainModel(task, train_loader, epoch, epoches, Net, optimizer, scheduler, lossList, local_size, image_size):
+    if torch.cuda.is_available():
+        device = torch.device('cuda')
+    else:
+        device = torch.device('cpu')
     for step, (Totalimage, label) in enumerate(train_loader):
-        pileImage       = Totalimage[0].cuda().view(-1,1,local_size,local_size)
-        pileImageMasked = Totalimage[1].cuda().view(-1,1,local_size,local_size)
+        pileImage       = Totalimage[0].view(-1,1,local_size,local_size).to(device)
+        pileImageMasked = Totalimage[1].view(-1,1,local_size,local_size).to(device)
 
         optimizer.zero_grad()
         output = Net(pileImageMasked)

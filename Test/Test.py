@@ -10,13 +10,17 @@ from Loader import load_dataset
 from ButterFlyNet_Identical import ButterFlyNet_Identical
 
 def test(test_loader,batch_size,Net,image_size,local_size,pic=False):
+    if torch.cuda.is_available():
+        device = torch.device('cuda')
+    else:
+        device = torch.device('cpu')
     for step, (Totalimage, label) in enumerate(test_loader):
         try:
             with torch.no_grad():
                 lap_time = image_size // local_size
-                overlapMasked = torch.zeros((batch_size * (lap_time ** 2), 3, local_size, local_size)).cuda()
-                image = Totalimage[0].cuda()
-                operatedimage = Totalimage[1].cuda()
+                overlapMasked = torch.zeros((batch_size * (lap_time ** 2), 3, local_size, local_size),device=device)
+                image = Totalimage[0].to(device)
+                operatedimage = Totalimage[1].to(device)
 
                 for ii in range(lap_time ** 2):
                     overlapMasked[ii * batch_size:(ii + 1) * batch_size, :, :, :] = operatedimage[:, :,
@@ -24,7 +28,7 @@ def test(test_loader,batch_size,Net,image_size,local_size,pic=False):
                                                                                     ii // lap_time) + 1) * local_size,
                                                                                     (ii % lap_time) * local_size:((
                                                                                     ii % lap_time) + 1) * local_size]
-                output_done = torch.zeros(batch_size, 3, image_size, image_size).cuda()
+                output_done = torch.zeros((batch_size, 3, image_size, image_size),device=device)
                 for i in range(3):
                     done = Net(overlapMasked[:, i:i + 1, :, :])
                     for ii in range(lap_time ** 2):
@@ -84,7 +88,7 @@ if __name__ == '__main__':
     imgpath_recover = '../Images/pics/' + task + '/' + p1 + '/' + p2 + '/' + datasetName + '_{}_{}_{}_{}_re.eps'.format(local_size,image_size,net_layer,cheb_num)
 
     checkPoint = torch.load(pthpath)
-    Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num).cuda()
+    Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num).to(device)
     Net.load_state_dict(checkPoint['Net'])
     train_loader,test_loader = load_dataset(task, datasetName, 20, batch_size_test, image_size, local_size, p1, p2)
     test(test_loader,batch_size_test,Net,image_size,local_size,pic)

@@ -9,7 +9,6 @@ This is the repository for ButterFlyNet2D, which is a neural network that can be
 </center>
 
 </p>
-All the codes are based on PyTorch with cuda. So before you run the codes, you may need to make sure you have a GPU that supports cuda.
 
 ## Funcs
 Here stored some supportive functions which will be used in the building-up, training or testing process.

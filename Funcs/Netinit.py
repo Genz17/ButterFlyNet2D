@@ -2,10 +2,14 @@ import torch
 from ButterFlyNet_Identical import ButterFlyNet_Identical
 
 def Netinit(local_size,net_layer,cheb_num,Resume,initMethod,pretrain,pthpath):
+    if torch.cuda.is_available():
+        device = torch.device('cuda')
+    else:
+        device = torch.device('cpu')
     if Resume:
         try:
             print('Resume. Loading...')
-            Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num).cuda()
+            Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num).to(device)
             optimizer = torch.optim.Adam(Net.parameters())
             scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.98, patience=100, verbose=True,
                                                                     threshold=0.00005, threshold_mode='rel', cooldown=3, min_lr=0, eps=1e-16)
@@ -27,7 +31,7 @@ def Netinit(local_size,net_layer,cheb_num,Resume,initMethod,pretrain,pthpath):
 
     else:
         print('\nGenerating Net...')
-        Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num).cuda()
+        Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num).to(device)
         try:
             path = '../Pths/Base' + '/{}_{}_{}_{}_{}.pth'.format(local_size,net_layer,cheb_num,initMethod,pretrain)
             Net.load_state_dict(torch.load(path))
@@ -35,7 +39,7 @@ def Netinit(local_size,net_layer,cheb_num,Resume,initMethod,pretrain,pthpath):
         except Exception:
             print('Need to initialize from the bottom.')
             print('\nGenerating Net...')
-            Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,initMethod).cuda()
+            Net = ButterFlyNet_Identical(local_size,net_layer,cheb_num,initMethod).to(device)
             if pretrain:
                 Net.pretrain(200)
             print('Done.')

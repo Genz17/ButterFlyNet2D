@@ -1,9 +1,9 @@
 {
-    "datasetName": "STL10",
+    "datasetName": "Celeba",
    	"task": "Linewatermark",
     "epoches": 12,
     "batch_size_train": 5,
-    "image_size": 64,
+    "image_size": 32,
     "local_size": 16,
     "net_layer": 4,
     "cheb_num": 2,

@@ -57,20 +57,20 @@ class ButterFlyNet2D_CNN_Flexible(nn.Module):
                                          out_channels=4 * 4 * (self.chebyshev_number ** 2)*self.in_channel_num,
                                          kernel_size=(self.w_height, self.w_width),
                                          stride=(self.stride_list[0][0], self.stride_list[0][1]),
-                                         bias=True).cuda()}
+                                         bias=True)}
         conv_dict_rcs = {str(lyr):
                              nn.Conv2d(in_channels=4*(4**lyr) * (self.chebyshev_number ** 2)*self.in_channel_num,
                                        out_channels=4*(4**(lyr+1)) * (self.chebyshev_number ** 2)*self.in_channel_num,
                                        kernel_size=(2, 2),
                                        stride=(self.stride_list[lyr][0],self.stride_list[lyr][1]),
-                                       bias=True).cuda()
+                                       bias=True)
                          for lyr in range(1, self.layer_number)}
         conv_dict_ft = {str(self.layer_number):
                             nn.Conv2d(in_channels=4*(4**self.layer_number) * (self.chebyshev_number ** 2)*self.in_channel_num,
                                       out_channels=4*self.frequency_kx_length*self.frequency_ky_length*self.in_channel_num,
                                       kernel_size=(1, 1),
                                       stride=(1, 1),
-                                      bias=True).cuda()}
+                                      bias=True)}
 
         conv_dict = {}
         conv_dict.update(conv_dict_first)
@@ -80,7 +80,7 @@ class ButterFlyNet2D_CNN_Flexible(nn.Module):
         if self.image:
             linear = {
                 str(self.layer_number + 1): nn.Linear(4 * self.in_channel_num * self.frequency_kx_length * self.frequency_ky_length,
-                                                      10).cuda()}
+                                                      10)}
             conv_dict.update(linear)
 
             nn.init.kaiming_normal_(conv_dict[str(self.layer_number + 1)].weight)
@@ -95,7 +95,7 @@ class ButterFlyNet2D_CNN_Flexible(nn.Module):
                                                            self.w_width//self.stride_list[0][1]),
                                               stride=(self.w_height//self.stride_list[0][0],
                                                         self.w_width//self.stride_list[0][1]),
-                                              bias=True).cuda()}
+                                              bias=True)}
             conv_Weights_adjust_first = {str(('Adjust', 0)):
                                              self.generate_AdjustConv_Weights(0)}
             conv_dict.update(AdjustConv_first)
@@ -106,7 +106,7 @@ class ButterFlyNet2D_CNN_Flexible(nn.Module):
                                         out_channels=1,
                                         kernel_size=(2 // self.stride_list[lyr][0], 2 // self.stride_list[lyr][1]),
                                         stride=(2 // self.stride_list[lyr][0], 2 // self.stride_list[lyr][1]),
-                                        bias=True).cuda()
+                                        bias=True)
                           for lyr in range(1, self.layer_number) if self.pooling_list[lyr]=='Adjust'}
         conv_Weights_adjust_rcs = {str(('Adjust', lyr)):
                                        self.generate_AdjustConv_Weights(lyr)
@@ -126,7 +126,7 @@ class ButterFlyNet2D_CNN_Flexible(nn.Module):
         return nn.ModuleDict(conv_dict)
 
     def forward(self, input_data):
-        out = self.split(input_data).cuda()
+        out = self.split(input_data)
         out_rcs = self.conv_dict[str(0)](out)
         out_rcs = nn.ReLU(inplace=True)(out_rcs)
         out_pad = period_padding(out_rcs, self.w_width//self.stride_list[0][1]-1,self.w_height//self.stride_list[0][0]-1)
@@ -144,7 +144,7 @@ class ButterFlyNet2D_CNN_Flexible(nn.Module):
             out_rcs = torch.zeros(out_pad.shape[0],
                                   out_pad.shape[1],
                                     2 ** (self.layer_number - 1),
-                                    2 ** (self.layer_number - 1), dtype=torch.float32, device='cuda:0')
+                                    2 ** (self.layer_number - 1), dtype=torch.float32)
             for inchannel in range(out_rcs.shape[1]):
                 out_rcs[:,inchannel:inchannel+1] = self.conv_dict[str(('Adjust', 0))](out_pad[:,inchannel:inchannel+1])
 
@@ -162,7 +162,7 @@ class ButterFlyNet2D_CNN_Flexible(nn.Module):
                 out_rcs = torch.zeros(out_pad.shape[0],
                                       out_pad.shape[1],
                                       2 ** (self.layer_number - lyr - 1),
-                                      2 ** (self.layer_number - lyr - 1), dtype=torch.float32, device='cuda:0')
+                                      2 ** (self.layer_number - lyr - 1), dtype=torch.float32)
                 for inchannel in range(out_rcs.shape[1]):
                     out_rcs[:, inchannel:inchannel + 1] = self.conv_dict[str(('Adjust', lyr))](out_pad[:, inchannel:inchannel + 1])
 
@@ -256,7 +256,7 @@ class ButterFlyNet2D_CNN_Flexible(nn.Module):
 
             wt_fst_lyr_single[4*out_channel+2] = -wt_fst_lyr_single[4*out_channel]
             wt_fst_lyr_single[4*out_channel+3] = -wt_fst_lyr_single[4*out_channel+1]
-        return nn.Parameter(torch.FloatTensor(wt_fst_lyr_single).cuda())
+        return nn.Parameter(torch.FloatTensor(wt_fst_lyr_single))
 
 
 
@@ -332,7 +332,7 @@ class ButterFlyNet2D_CNN_Flexible(nn.Module):
 
             wt_rcs_lyr_single[4*out_channel+2] = -wt_rcs_lyr_single[4*out_channel]
             wt_rcs_lyr_single[4*out_channel+3] = -wt_rcs_lyr_single[4*out_channel+1]
-        return nn.Parameter(torch.FloatTensor(wt_rcs_lyr_single).cuda())
+        return nn.Parameter(torch.FloatTensor(wt_rcs_lyr_single))
 
     def generate_FT_Layer_Weights(self):
         chebyshev_row_dots = Chebyshev_Nodes([0, 1], self.chebyshev_number)
@@ -383,7 +383,7 @@ class ButterFlyNet2D_CNN_Flexible(nn.Module):
             wt_ft_lyr_single[4*out_channel+2:4*out_channel+3] = -wt_ft_lyr_single[4*out_channel:4*out_channel+1]
             wt_ft_lyr_single[4*out_channel+3:4*out_channel+4] = -wt_ft_lyr_single[4*out_channel+1:4*out_channel+2]
 
-        return nn.Parameter(torch.FloatTensor(wt_ft_lyr_single).cuda())
+        return nn.Parameter(torch.FloatTensor(wt_ft_lyr_single))
 
     def joint(self, out):
         '''
@@ -393,7 +393,7 @@ class ButterFlyNet2D_CNN_Flexible(nn.Module):
         out_joint = torch.zeros(out.shape[0],
                                 self.in_channel_num*self.frequency_kx_length*self.frequency_ky_length,
                                 1,
-                                1, dtype=torch.complex64).cuda()
+                                1, dtype=torch.complex64)
 
         for channel in range(out_joint.shape[1]):
             out_joint[:, channel, 0, 0] = out[:, 4 * channel, 0, 0] + \
@@ -417,4 +417,4 @@ class ButterFlyNet2D_CNN_Flexible(nn.Module):
                                   2 // self.stride_list[lyr][1]))
             wt_adjust[0][0][0][0] = 1
 
-        return nn.Parameter(torch.tensor(wt_adjust, dtype=torch.float32, device='cuda:0'))
+        return nn.Parameter(torch.tensor(wt_adjust, dtype=torch.float32))

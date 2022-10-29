@@ -42,14 +42,14 @@ class ButterFlyNet2D_IDFT(nn.Module):
                                                               out_channels=4 * 4 * (self.chebyshev_number ** 2),
                                                               kernel_size=(self.w_ky, self.w_kx),
                                                               stride=(self.w_ky, self.w_kx),
-                                                              bias=True).cuda()
+                                                              bias=True)
                                             for in_channel in range(self.in_channel_num)}
         conv_dict_rcs                       ={str((lyr, in_channel, A_y, A_x)):
                                                   nn.Conv2d(in_channels=4 * self.chebyshev_number ** 2,
                                                             out_channels=4 * 4 * (self.chebyshev_number ** 2),
                                                             kernel_size=(2, 2),
                                                             stride=(2, 2),
-                                                            bias=True).cuda()
+                                                            bias=True)
                                             for lyr in range(1,self.layer_number)
                                             for in_channel in range(self.in_channel_num)
                                             for A_y in range(2**lyr)
@@ -58,7 +58,7 @@ class ButterFlyNet2D_IDFT(nn.Module):
                                                    nn.Conv2d(in_channels=4 * self.chebyshev_number ** 2,
                                                              out_channels=4 * self.leftover_x * self.leftover_y,
                                                              kernel_size=(1, 1),
-                                                             bias=True).cuda()
+                                                             bias=True)
                                             for in_channel in range(self.in_channel_num)
                                             for A_y in range(2**self.layer_number)
                                             for A_x in range(2**self.layer_number)}
@@ -107,12 +107,12 @@ class ButterFlyNet2D_IDFT(nn.Module):
         return  nn.ModuleDict(conv_dict)
     def forward(self, input_data):
 
-        input_data = self.split(input_data).cuda()
+        input_data = self.split(input_data)
 
         out1 = torch.zeros(input_data.shape[0],
                            self.in_channel_num * 4 * 4 * (self.chebyshev_number ** 2),
                            2**(self.layer_number-1),
-                           2**(self.layer_number-1)).cuda()
+                           2**(self.layer_number-1))
         for channel in range(self.in_channel_num):
             out1[:, channel*4*4*(self.chebyshev_number**2):(channel+1)*4*4*(self.chebyshev_number**2)] = \
                 self.conv_dict[str((0, channel, 0, 0))](input_data[:, 4*channel:4*(channel+1)])
@@ -122,7 +122,7 @@ class ButterFlyNet2D_IDFT(nn.Module):
             out = torch.zeros(input_data.shape[0],
                               self.in_channel_num*4*4**(lyr+1)*(self.chebyshev_number**2),
                               2**(self.layer_number-lyr-1),
-                              2**(self.layer_number-lyr-1)).cuda()
+                              2**(self.layer_number-lyr-1))
             for channel in range(self.in_channel_num):
                 for A in range(4**lyr):
                     A_x= A%(2**lyr)
@@ -148,7 +148,7 @@ class ButterFlyNet2D_IDFT(nn.Module):
         out_final = torch.zeros(input_data.shape[0],
                           self.in_channel_num*4*self.height*self.width,
                           1,
-                          1).cuda()
+                          1)
         for channel in range(self.in_channel_num):
             for A in range(4**(self.layer_number)):
                 A_x = A%(2**self.layer_number)
@@ -266,7 +266,7 @@ class ButterFlyNet2D_IDFT(nn.Module):
 
             wt_fst_lyr_single[4*channel+2] = -wt_fst_lyr_single[4*channel]
             wt_fst_lyr_single[4*channel+3] = -wt_fst_lyr_single[4*channel+1]
-        return nn.Parameter(torch.FloatTensor(wt_fst_lyr_single).cuda())
+        return nn.Parameter(torch.FloatTensor(wt_fst_lyr_single))
 
 
 
@@ -339,7 +339,7 @@ class ButterFlyNet2D_IDFT(nn.Module):
 
             wt_rcs_lyr_single[4*out_channel+2] = -wt_rcs_lyr_single[4*out_channel]
             wt_rcs_lyr_single[4*out_channel+3] = -wt_rcs_lyr_single[4*out_channel+1]
-        return nn.Parameter(torch.FloatTensor(wt_rcs_lyr_single).cuda())
+        return nn.Parameter(torch.FloatTensor(wt_rcs_lyr_single))
 
     def generate_FT_Layer_Weights(self, A_row_index_last_lyr, A_column_index_last_lyr):
         xi_x = [self.x_uni_dots[self.leftover_x * A_row_index_last_lyr + i] for i in range(self.leftover_x)]
@@ -385,7 +385,7 @@ class ButterFlyNet2D_IDFT(nn.Module):
             wt_ft_lyr_single[4*out_channel+2:4*out_channel+3] = -wt_ft_lyr_single[4*out_channel:4*out_channel+1]
             wt_ft_lyr_single[4*out_channel+3:4*out_channel+4] = -wt_ft_lyr_single[4*out_channel+1:4*out_channel+2]
 
-        return nn.Parameter(torch.FloatTensor(wt_ft_lyr_single).cuda())
+        return nn.Parameter(torch.FloatTensor(wt_ft_lyr_single))
 
     def joint(self, out):
         '''
@@ -396,7 +396,7 @@ class ButterFlyNet2D_IDFT(nn.Module):
             out_joint = torch.zeros(out.shape[0],
                                     self.in_channel_num * self.height * self.width,
                                     1,
-                                    1).cuda()
+                                    1)
             for channel in range(out_joint.shape[1]):
                 out_joint[:,channel,0,0] = out[:, 4 * channel, 0, 0] + \
                                             -out[:, 4 * channel + 2, 0, 0]
@@ -404,7 +404,7 @@ class ButterFlyNet2D_IDFT(nn.Module):
             out_joint = torch.zeros(out.shape[0],
                                     self.in_channel_num * self.height * self.width,
                                     1,
-                                    1, dtype=torch.complex64).cuda()
+                                    1, dtype=torch.complex64)
             for channel in range(out_joint.shape[1]):
                 out_joint[:,channel,0,0] = out[:, 4 * channel, 0, 0] + \
                                             1j*out[:, 4 * channel + 1, 0, 0] + \

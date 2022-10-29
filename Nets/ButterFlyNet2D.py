@@ -53,14 +53,14 @@ class ButterFlyNet2D(nn.Module):
                                                     out_channels=4 * 4 * (self.chebyshev_number ** 2),
                                                     kernel_size=(self.w_height, self.w_width),
                                                     stride=(self.w_height, self.w_width),
-                                                    bias=True).cuda()
+                                                    bias=True)
                                             for in_channel in range(self.in_channel_num)}
         conv_dict_rcs                       ={str((lyr, in_channel, A_y, A_x)):
                                                   nn.Conv2d(in_channels=4 * self.chebyshev_number ** 2,
                                                             out_channels=4 * 4 * (self.chebyshev_number ** 2),
                                                             kernel_size=(2, 2),
                                                             stride=(2, 2),
-                                                            bias=True).cuda()
+                                                            bias=True)
                                             for lyr in range(1,self.layer_number)
                                             for in_channel in range(self.in_channel_num)
                                             for A_y in range(2**lyr)
@@ -69,7 +69,7 @@ class ButterFlyNet2D(nn.Module):
                                                    nn.Conv2d(in_channels=4 * self.chebyshev_number ** 2,
                                                              out_channels=4 * self.leftover_kx * self.leftover_ky,
                                                              kernel_size=(1, 1),
-                                                             bias=True).cuda()
+                                                             bias=True)
                                             for in_channel in range(self.in_channel_num)
                                             for A_y in range(2**self.layer_number)
                                             for A_x in range(2**self.layer_number)}
@@ -116,7 +116,7 @@ class ButterFlyNet2D(nn.Module):
         return nn.ModuleDict(conv_dict)
 
     def forward(self, input_data):
-        input_data = self.split(input_data).cuda()
+        input_data = self.split(input_data)
 
         out1 = torch.zeros(input_data.shape[0],
                            self.in_channel_num * 4 * 4 * (self.chebyshev_number ** 2),
@@ -418,7 +418,7 @@ class ButterFlyNet2D(nn.Module):
         out_joint = torch.zeros(out.shape[0],
                                 self.in_channel_num*self.frequency_kx_length*self.frequency_ky_length,
                                 1,
-                                1, dtype=torch.complex64).cuda()
+                                1, dtype=torch.complex64)
 
         for channel in range(out_joint.shape[1]):
             out_joint[:, channel, 0, 0] = out[:, 4 * channel, 0, 0] + \

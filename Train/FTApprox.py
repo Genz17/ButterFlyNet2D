@@ -13,12 +13,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 setup_seed(17)
+if torch.cuda.is_available():
+    device = torch.device('cuda')
+else:
+    device = torch.device('cpu')
 
 
 def main(testType,Num,inputSize,initMethod,netType,pretrain):
-    dataTest            = torch.rand(1,1,inputSize,inputSize, dtype=torch.complex64).cuda() # choose something you like
-    outTest_ft          = torch.fft.fft2(dataTest).cuda()
-
+    dataTest            = torch.rand(1,1,inputSize,inputSize, dtype=torch.complex64, device=device) # choose something you like
+    outTest_ft          = torch.fft.fft2(dataTest)
     if testType == 'layer':
         chebNum = Num
         lossList1 = []
