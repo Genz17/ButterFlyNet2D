@@ -75,6 +75,11 @@ if __name__ == '__main__':
     pretrain    = eval(sys.argv[8])
     pic         = eval(sys.argv[9])
 
+    if torch.cuda.is_available():
+        device = torch.device('cuda')
+    else:
+        device = torch.device('cpu')
+
     p1 = initMethod
     if pretrain:
         p2 = 'pretrain'
