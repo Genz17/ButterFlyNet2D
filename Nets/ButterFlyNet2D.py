@@ -121,7 +121,7 @@ class ButterFlyNet2D(nn.Module):
         out1 = torch.zeros(input_data.shape[0],
                            self.in_channel_num * 4 * 4 * (self.chebyshev_number ** 2),
                            2**(self.layer_number-1),
-                           2**(self.layer_number-1), dtype=torch.float32, device='cuda:0')
+                           2**(self.layer_number-1), dtype=torch.float32)
         for channel in range(self.in_channel_num):
             out1[:, channel*4*4*(self.chebyshev_number**2):(channel+1)*4*4*(self.chebyshev_number**2)] = \
                 self.conv_dict[str((0, channel, 0, 0))](input_data[:, 4*channel:4*(channel+1)])
@@ -131,7 +131,7 @@ class ButterFlyNet2D(nn.Module):
             out = torch.zeros(input_data.shape[0],
                               self.in_channel_num*4*4**(lyr+1)*(self.chebyshev_number**2),
                               2**(self.layer_number-lyr-1),
-                              2**(self.layer_number-lyr-1), dtype=torch.float32, device='cuda:0')
+                              2**(self.layer_number-lyr-1), dtype=torch.float32)
             for channel in range(self.in_channel_num):
                 for A in range(4 ** lyr):
                     A_x = A % (2 ** lyr)
@@ -159,7 +159,7 @@ class ButterFlyNet2D(nn.Module):
         out_final = torch.zeros(input_data.shape[0],
                           self.in_channel_num*4*self.frequency_kx_length*self.frequency_ky_length,
                           1,
-                          1, dtype=torch.float32, device='cuda:0')
+                          1, dtype=torch.float32)
 
         for channel in range(self.in_channel_num):
             for A in range(4**(self.layer_number)):
@@ -203,7 +203,7 @@ class ButterFlyNet2D(nn.Module):
         data_split = torch.zeros((input_data.shape[0],
                      4*input_data.shape[1],
                      input_data.shape[2],
-                     input_data.shape[3]), dtype=torch.float32, device='cuda:0')
+                     input_data.shape[3]), dtype=torch.float32)
 
         if self.positivereal:
             for channel in range(input_data.shape[1]):
@@ -286,7 +286,7 @@ class ButterFlyNet2D(nn.Module):
 
             wt_fst_lyr_single[4*channel+2] = -wt_fst_lyr_single[4*channel]
             wt_fst_lyr_single[4*channel+3] = -wt_fst_lyr_single[4*channel+1]
-        return nn.Parameter(torch.tensor(wt_fst_lyr_single, dtype=torch.float32, device='cuda:0'))
+        return nn.Parameter(torch.tensor(wt_fst_lyr_single, dtype=torch.float32))
 
 
 
@@ -362,7 +362,7 @@ class ButterFlyNet2D(nn.Module):
 
             wt_rcs_lyr_single[4*out_channel+2] = -wt_rcs_lyr_single[4*out_channel]
             wt_rcs_lyr_single[4*out_channel+3] = -wt_rcs_lyr_single[4*out_channel+1]
-        return nn.Parameter(torch.tensor(wt_rcs_lyr_single, dtype=torch.float32, device='cuda:0'))
+        return nn.Parameter(torch.tensor(wt_rcs_lyr_single, dtype=torch.float32))
 
     def generate_FT_Layer_Weights(self, A_row_index_last_lyr, A_column_index_last_lyr):
         xi_x = [self.frequency_kx_uni_dots[self.leftover_kx*A_row_index_last_lyr+i] for i in range(self.leftover_kx)]
@@ -408,7 +408,7 @@ class ButterFlyNet2D(nn.Module):
             wt_ft_lyr_single[4*out_channel+2:4*out_channel+3] = -wt_ft_lyr_single[4*out_channel:4*out_channel+1]
             wt_ft_lyr_single[4*out_channel+3:4*out_channel+4] = -wt_ft_lyr_single[4*out_channel+1:4*out_channel+2]
 
-        return nn.Parameter(torch.tensor(wt_ft_lyr_single, dtype=torch.float32, device='cuda:0'))
+        return nn.Parameter(torch.tensor(wt_ft_lyr_single, dtype=torch.float32))
 
     def joint(self, out):
         '''
