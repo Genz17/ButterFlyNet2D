@@ -99,4 +99,4 @@ The networks will load data from here by default. CIFAR10 and STL10 dataset are 
 These two folders are created for storing parameters and images.
 
 ## Acknowledgement
-The author thanks <a href="https://github.com/YingzhouLi">Yingzhou Li</a>, the code are implemented with his great help.
+The author thanks <a href="https://github.com/YingzhouLi">Yingzhou Li</a>, the code is implemented with his great help.
