@@ -19,6 +19,15 @@ Before the training process, we highly recommend you to run ` BaseInitGenerate.p
 python BaseInitGenerate.py <input size> <layer number> <cheb num> <initMethod> <pretrain>
 ```
 
+You can determine what you want follow this:
+```
+input size: 32/64/128/256
+layer number: any positive integer you want
+cheb num: any positive integer you want
+initMethod: Fourier/kaimingU/kaimingN/orthogonal
+pretrain: True/False
+```
+
 This will do the initialization and save the parameters which can be reused in training.
 
 ## Nets
@@ -30,6 +39,19 @@ Mainly contain test parts. `Test.py` is implemented for testing, while other pro
 
 ```
 python Test.py <task name> <dataset name> <image size> <local size> <net layer> <cheb num> <initMethod> <pretrain> <pic>
+```
+
+You can determine what you want follow this:
+```
+task name: Inpaint/Denoise/Deblur/Linewatermark
+dataset name: Celeba/CIFAR10/STL10
+image size: 32/64/128/256
+local size: 16/32/64
+net layer: any positive integer you want
+cheb num: any positive integer you want
+initMethod: Fourier/kaimingU/kaimingN/orthogonal
+pretrain: True/False
+pic: True/False
 ```
 
 Here the option `<pic>` is for whether you want to save images.
@@ -55,6 +77,7 @@ If you want to do the training tasks, adjust settings in `settings.json`:
     "resume": false
 }
 ```
+the option `resume` is for resume.
 
 Then run `train.py`:
 
@@ -76,4 +99,4 @@ The networks will load data from here by default. CIFAR10 and STL10 dataset are 
 These two folders are created for storing parameters and images.
 
 ## Acknowledgement
-The author thanks <a href="https://github.com/YingzhouLi">Yingzhou Li</a>, the codes are implemented with his great help.
+The author thanks <a href="https://github.com/YingzhouLi">Yingzhou Li</a>, the code are implemented with his great help.
