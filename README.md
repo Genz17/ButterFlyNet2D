@@ -1,5 +1,8 @@
 # ButterFlyNet2D
-This is the repository for ButterFlyNet2D, which is a neural network that can be initialized as a Fourier Transform Operator. <br />
+This is the repository for ButterFlyNet2D, which is a neural network that can be initialized as a 
+Fourier Transform Operator or its inverse. If you are interested in this work, refer to 
+<a href="https://arxiv.org/abs/2211.16578">[Paper]</a>. <br />
+
 <p>
 
 <center>
